@@ -653,6 +653,93 @@ table.kv td {
   color: #555;
 }
 
+/* ---------- Resume page ----------------------------------- */
+/* Reuses the gray property-sheet look from About Me, plus a
+   CSS-only tab strip (radio inputs hidden, labels styled as
+   chunky Win98 property-sheet tabs). */
+.window-body > .resume-page {
+  margin: -12px -14px;
+  padding: 10px 14px 14px;
+  background: var(--face);
+  min-height: calc(100% + 24px);
+  color: #000;
+  font-size: 12px;
+}
+.resume-tab-radio { display: none; }
+.resume-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 0 0 4px;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 2;
+}
+.resume-tabs label {
+  background: var(--face);
+  border: 1px solid var(--face-dark);
+  border-bottom: none;
+  padding: 4px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  box-shadow:
+    inset 1px 1px 0 var(--highlight),
+    inset -1px 0 0 var(--face-dark);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.resume-tabs label:hover { background: var(--face-light); }
+#r-tab-swe:checked ~ .resume-tabs label[for="r-tab-swe"],
+#r-tab-ai:checked  ~ .resume-tabs label[for="r-tab-ai"] {
+  background: var(--face);
+  font-weight: bold;
+  padding-top: 5px;
+  margin-top: -2px;
+  z-index: 3;
+}
+
+/* Panels — sunken bevel like a property-sheet pane */
+.resume-panels {
+  border: 1px solid var(--face-dark);
+  border-bottom-color: var(--highlight);
+  border-right-color: var(--highlight);
+  box-shadow:
+    inset 1px 1px 0 var(--face-darker),
+    inset -1px -1px 0 var(--face-light);
+  background: var(--face);
+  padding: 14px 14px 10px;
+  position: relative;
+}
+.resume-panel { display: none; }
+#r-tab-swe:checked ~ .resume-panels .resume-panel[data-tab="swe"],
+#r-tab-ai:checked  ~ .resume-panels .resume-panel[data-tab="ai"] {
+  display: block;
+}
+
+.resume-head { margin-bottom: 12px; }
+.resume-head h2 { font-size: 18px; margin: 0 0 4px; }
+.resume-contact { font-size: 12px; color: #333; margin: 0; }
+
+.resume-job + .resume-job { margin-top: 14px; }
+.resume-job-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 12px;
+}
+.resume-job-row.sub { margin-top: 4px; }
+.resume-job-row strong { font-weight: bold; }
+.resume-job-row em { font-style: italic; }
+.resume-job ul {
+  margin: 4px 0 0;
+  padding-left: 22px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.resume-job ul + .resume-job-row.sub { margin-top: 8px; }
+.resume-job ul li { margin: 2px 0; }
+
 /* ---------- Mobile ----------------------------------------
    At phone widths there's no room for floating, draggable
    windows. Each window opens fullscreen and the OS chrome

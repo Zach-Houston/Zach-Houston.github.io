@@ -168,17 +168,293 @@
     </template>
 
     <template data-content="resume">
-      <h2>Resume</h2>
-      <p><em>// Placeholder — drop a PDF in <code>assets/</code> and link it here.</em></p>
-      <p>
-        <a class="link" href="#" onclick="return false;">resume.pdf</a> &nbsp;·&nbsp;
-        <a class="link" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
-      </p>
-      <hr />
-      <h3>Experience</h3>
-      <p>Role · Company · Dates</p>
-      <h3>Education</h3>
-      <p>Degree · School · Dates</p>
+      <div class="resume-page">
+        <!-- CSS-only tabs via radio inputs -->
+        <input type="radio" name="resume-tab" id="r-tab-swe" class="resume-tab-radio" checked />
+        <input type="radio" name="resume-tab" id="r-tab-ai"  class="resume-tab-radio" />
+
+        <nav class="resume-tabs">
+          <label for="r-tab-swe">Software Engineer</label>
+          <label for="r-tab-ai">AI Engineer</label>
+        </nav>
+
+        <div class="resume-panels">
+          <!-- ============ Software Engineer ===================== -->
+          <section class="resume-panel" data-tab="swe">
+            <header class="resume-head">
+              <h2>Zachary Houston</h2>
+              <p class="resume-contact">
+                <a class="link" href="mailto:zacharyhouston34@gmail.com">zacharyhouston34@gmail.com</a>
+                &nbsp;·&nbsp;
+                <a class="link" href="https://www.linkedin.com/in/zach-houston" target="_blank" rel="noreferrer">LinkedIn</a>
+                &nbsp;·&nbsp;
+                <a class="link" href="https://github.com/Zach-Houston" target="_blank" rel="noreferrer">github.com/Zach-Houston</a>
+              </p>
+            </header>
+
+            <fieldset class="win-fieldset">
+              <legend>Experience</legend>
+
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>Salesforce</strong>
+                  <span class="muted">Remote (San Francisco, CA)</span>
+                </div>
+                <div class="resume-job-row sub">
+                  <em>Senior Software Engineer</em>
+                  <span class="muted">Feb 2025 &ndash; Present</span>
+                </div>
+                <ul>
+                  <li>Continued development of the setup-experience framework, focusing on setup flows for the company&rsquo;s AI-related features.</li>
+                  <li>Standardized previously fragmented, team-by-team setup flows across the platform, cutting duplicated engineering effort and improving feature adoption.</li>
+                  <li>Used Claude Code to orchestrate automated alert analysis, PR review, and bug triage, and developed reusable Claude skills to accelerate AI adoption across the company.</li>
+                  <li>Conducted technical interviews for intern and new-grad engineering candidates, assessing coding ability and problem-solving to inform hiring decisions.</li>
+                </ul>
+                <div class="resume-job-row sub">
+                  <em>Software Engineer</em>
+                  <span class="muted">Mar 2021 &ndash; Feb 2025</span>
+                </div>
+                <ul>
+                  <li>Contributed core pieces to a reusable setup-experience framework in Java and TypeScript/JavaScript, replacing bespoke per-team configuration flows with automated, guided setup pages.</li>
+                  <li>Built an in-app learning system that bundled Salesforce training directly into the product, with guided learning paths and milestone tracking.</li>
+                  <li>Enabled organizations to author and deliver their own customized training content within the Salesforce experience, alongside Salesforce&rsquo;s native lessons.</li>
+                  <li>Designed interactive lessons tied to live in-org Salesforce objects, requiring users to create real records to demonstrate competency rather than passively complete material.</li>
+                  <li>Built leadership dashboards to track learning completion and progress across an organization.</li>
+                </ul>
+              </div>
+
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>IBM</strong>
+                  <span class="muted">Raleigh, NC</span>
+                </div>
+                <div class="resume-job-row sub">
+                  <em>Java Software Developer</em>
+                  <span class="muted">May 2018 &ndash; Mar 2021</span>
+                </div>
+                <ul>
+                  <li>Contributed to the development of an Eclipse-based Integrated Development Environment.</li>
+                  <li>Collaborated with team members to design and integrate editor parsing changes based on internal and external feedback.</li>
+                  <li>Cooperated with external teams to guide integrations with the product.</li>
+                  <li>Assisted in leading &ldquo;zStart,&rdquo; a group created to help new hires adjust to work in the Systems department.</li>
+                </ul>
+              </div>
+
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>University of Tennessee, Knoxville</strong>
+                  <span class="muted">Knoxville, TN</span>
+                </div>
+                <div class="resume-job-row sub">
+                  <em>Freelance Python Developer</em>
+                  <span class="muted">Apr 2018 &ndash; May 2018</span>
+                </div>
+                <ul>
+                  <li>Built Python web-scraping modules to collect and parse research data from multiple websites for the UTK College of Business.</li>
+                </ul>
+              </div>
+
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>hackUTK Cybersecurity Club</strong>
+                  <span class="muted">Knoxville, TN</span>
+                </div>
+                <div class="resume-job-row sub">
+                  <em>Teaching Director</em>
+                  <span class="muted">Aug 2017 &ndash; May 2018</span>
+                </div>
+                <ul>
+                  <li>Aided with lesson plans and teaching sessions for club members.</li>
+                  <li>Designed challenges for and helped run two capture-the-flag (CTF) events.</li>
+                </ul>
+              </div>
+
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>Asurion</strong>
+                  <span class="muted">Nashville, TN</span>
+                </div>
+                <div class="resume-job-row sub">
+                  <em>Software Engineer Intern</em>
+                  <span class="muted">May 2017 &ndash; Aug 2017</span>
+                </div>
+                <ul>
+                  <li>Scripted the collection and classification of private data fields in Python to help teams adhere to data privacy standards.</li>
+                  <li>Served as team leader for a group of fellow interns on a side project.</li>
+                  <li>Identified and reported an XSS vulnerability to the security team and recommended a fix.</li>
+                </ul>
+              </div>
+            </fieldset>
+
+            <fieldset class="win-fieldset">
+              <legend>Education</legend>
+              <div class="resume-job-row">
+                <strong>University of Tennessee, Knoxville</strong>
+                <span class="muted">Aug 2014 &ndash; May 2018</span>
+              </div>
+              <div class="resume-job-row sub">
+                <em>B.S. in Computer Science, Minor in Cybersecurity</em>
+              </div>
+            </fieldset>
+
+            <fieldset class="win-fieldset">
+              <legend>Skills</legend>
+              <table class="kv">
+                <tr><th>Languages</th><td>Java, TypeScript, JavaScript, Python, Kotlin</td></tr>
+                <tr><th>Frontend</th><td>Lightning Web Components (LWC), HTML, CSS</td></tr>
+                <tr><th>Tools &amp; Practices</th><td>Git, Agile, Claude Code</td></tr>
+              </table>
+            </fieldset>
+          </section>
+
+          <!-- ============ AI Engineer ============================ -->
+          <section class="resume-panel" data-tab="ai">
+            <header class="resume-head">
+              <h2>Zachary Houston</h2>
+              <p class="resume-contact">
+                <a class="link" href="mailto:zacharyhouston34@gmail.com">zacharyhouston34@gmail.com</a>
+                &nbsp;·&nbsp;
+                <a class="link" href="https://www.linkedin.com/in/zach-houston" target="_blank" rel="noreferrer">LinkedIn</a>
+                &nbsp;·&nbsp;
+                <a class="link" href="https://github.com/Zach-Houston" target="_blank" rel="noreferrer">github.com/Zach-Houston</a>
+              </p>
+            </header>
+
+            <fieldset class="win-fieldset">
+              <legend>Experience</legend>
+
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>Salesforce</strong>
+                  <span class="muted">Remote (San Francisco, CA)</span>
+                </div>
+                <div class="resume-job-row sub">
+                  <em>Senior Software Engineer</em>
+                  <span class="muted">Feb 2025 &ndash; Present</span>
+                </div>
+                <ul>
+                  <li>Built a reusable, configurable Claude skill for retrieving, triaging, and recommending fixes for incoming alerts &mdash; adopted by other teams to automate their own alert handling by dropping in their channel.</li>
+                  <li>Developed a Claude skill that orchestrates multiple independent subagents to triage a team&rsquo;s alerts, pending PRs, and unresolved messages, posting a consolidated summary with suggested actions to Slack.</li>
+                  <li>Built an agent flow that gathers context from work items, Slack threads, and documents, then implements a solution and opens a PR for review.</li>
+                  <li>Drove setup-experience framework work focused on setup flows for the company&rsquo;s AI-related features.</li>
+                  <li>Conducted technical interviews for intern and new-grad engineering candidates.</li>
+                </ul>
+                <div class="resume-job-row sub">
+                  <em>Software Engineer</em>
+                  <span class="muted">Mar 2021 &ndash; Feb 2025</span>
+                </div>
+                <ul>
+                  <li>Contributed core pieces to a reusable setup-experience framework in Java and TypeScript/JavaScript, replacing bespoke per-team configuration flows with automated, guided setup pages and standardizing setup across the platform.</li>
+                  <li>Built an in-app learning system that bundled Salesforce training directly into the product, with guided learning paths and milestone tracking.</li>
+                  <li>Enabled organizations to author and deliver their own customized training content within the Salesforce experience, alongside Salesforce&rsquo;s native lessons.</li>
+                  <li>Designed interactive lessons tied to live in-org Salesforce objects, requiring users to create real records to demonstrate competency rather than passively complete material.</li>
+                  <li>Built leadership dashboards to track learning completion and progress across an organization.</li>
+                </ul>
+              </div>
+
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>IBM</strong>
+                  <span class="muted">Raleigh, NC</span>
+                </div>
+                <div class="resume-job-row sub">
+                  <em>Java Software Developer</em>
+                  <span class="muted">May 2018 &ndash; Mar 2021</span>
+                </div>
+                <ul>
+                  <li>Contributed to the development of an Eclipse-based Integrated Development Environment, designing and integrating editor parsing changes from internal and external feedback.</li>
+                  <li>Assisted in leading &ldquo;zStart,&rdquo; a group created to help new hires adjust to work in the Systems department.</li>
+                </ul>
+              </div>
+
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>University of Tennessee, Knoxville</strong>
+                  <span class="muted">Knoxville, TN</span>
+                </div>
+                <div class="resume-job-row sub">
+                  <em>Freelance Python Developer</em>
+                  <span class="muted">Apr 2018 &ndash; May 2018</span>
+                </div>
+                <ul>
+                  <li>Built Python web-scraping modules to collect and parse research data from multiple websites for the UTK College of Business.</li>
+                </ul>
+              </div>
+
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>hackUTK Cybersecurity Club</strong>
+                  <span class="muted">Knoxville, TN</span>
+                </div>
+                <div class="resume-job-row sub">
+                  <em>Teaching Director</em>
+                  <span class="muted">Aug 2017 &ndash; May 2018</span>
+                </div>
+                <ul>
+                  <li>Built lesson plans and designed challenges for two capture-the-flag (CTF) events for club members.</li>
+                </ul>
+              </div>
+
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>Asurion</strong>
+                  <span class="muted">Nashville, TN</span>
+                </div>
+                <div class="resume-job-row sub">
+                  <em>Software Engineer Intern</em>
+                  <span class="muted">May 2017 &ndash; Aug 2017</span>
+                </div>
+                <ul>
+                  <li>Scripted the collection and classification of private data fields in Python to help teams adhere to data privacy standards.</li>
+                  <li>Identified and reported an XSS vulnerability to the security team and recommended a fix.</li>
+                </ul>
+              </div>
+            </fieldset>
+
+            <fieldset class="win-fieldset">
+              <legend>AI Projects</legend>
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>Animal Crossing &mdash; LLM-Driven NPC Dialogue</strong>
+                </div>
+                <ul>
+                  <li>Extended an open-source PC port of a decompiled GameCube game (large native C codebase) to replace static villager dialogue with live conversation generated through the Anthropic Claude API.</li>
+                  <li>Implemented persistent per-villager memory and multi-turn, back-and-forth dialogue so each NPC maintains its own conversational state across interactions.</li>
+                </ul>
+              </div>
+              <div class="resume-job">
+                <div class="resume-job-row">
+                  <strong>RetroArch MCP Server</strong>
+                </div>
+                <ul>
+                  <li>Built a Java MCP (Model Context Protocol) server exposing nine tools that let an LLM set up and operate the RetroArch emulator &mdash; detecting installs across platforms, validating and patching config, managing cores, and driving emulation and gameplay input over RetroArch&rsquo;s UDP command interface.</li>
+                </ul>
+              </div>
+            </fieldset>
+
+            <fieldset class="win-fieldset">
+              <legend>Education</legend>
+              <div class="resume-job-row">
+                <strong>University of Tennessee, Knoxville</strong>
+                <span class="muted">Aug 2014 &ndash; May 2018</span>
+              </div>
+              <div class="resume-job-row sub">
+                <em>B.S. in Computer Science, Minor in Cybersecurity</em>
+              </div>
+            </fieldset>
+
+            <fieldset class="win-fieldset">
+              <legend>Skills</legend>
+              <table class="kv">
+                <tr><th>Languages</th><td>Java, TypeScript, JavaScript, Python, C, Kotlin</td></tr>
+                <tr><th>AI &amp; Integration</th><td>Anthropic Claude API, Model Context Protocol (MCP), Claude Code (workflows, subagents, agent teams), agent orchestration</td></tr>
+                <tr><th>Frontend</th><td>Lightning Web Components (LWC), HTML, CSS</td></tr>
+                <tr><th>Tools &amp; Practices</th><td>Git, Agile</td></tr>
+              </table>
+            </fieldset>
+          </section>
+        </div>
+      </div>
     </template>
 
     <template data-content="projects">
