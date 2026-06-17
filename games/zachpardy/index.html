@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Zachpardy</title>
+    <link rel="stylesheet" href="zachpardy.css" />
+  </head>
+  <body>
+    <div id="zp-root">
+      <!-- ============ Header / scores ============================ -->
+      <header id="zp-header">
+        <div class="zp-brand">ZACHPARDY</div>
+        <div class="zp-round" id="zp-round">— Press Start —</div>
+        <div class="zp-seed-chip" id="zp-seed-chip" hidden>
+          <span class="zp-seed-chip-label">SEED</span>
+          <span class="zp-seed-chip-value" id="zp-seed-chip-value">—</span>
+        </div>
+        <div class="zp-scores">
+          <div class="zp-score-box">
+            <div class="zp-score-label">TOTAL</div>
+            <div class="zp-score-value" id="zp-score-total">$0</div>
+          </div>
+          <div class="zp-score-box">
+            <div class="zp-score-label">CORYAT</div>
+            <div class="zp-score-value" id="zp-score-coryat">$0</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ============ Board ===================================== -->
+      <main id="zp-board" aria-label="Game board">
+        <!-- Populated by JS -->
+      </main>
+
+      <!-- ============ Round-transition splash =================== -->
+      <div id="zp-splash" class="zp-splash" hidden>
+        <div class="zp-splash-text" id="zp-splash-text">JEOPARDY!</div>
+      </div>
+
+      <!-- ============ Start / restart overlay =================== -->
+      <div id="zp-start" class="zp-modal">
+        <div class="zp-dialog">
+          <h1 class="zp-logo">ZACHPARDY</h1>
+          <p class="zp-lede">Solo Jeopardy! · Skip what you don't know · Type your answer · Mark it correct if we get it wrong.</p>
+
+          <div class="zp-seed-block">
+            <label class="zp-seed-label" for="zp-seed-input">SEED</label>
+            <div class="zp-seed-row">
+              <input id="zp-seed-input" type="text" autocomplete="off"
+                     maxlength="32" spellcheck="false" />
+              <button type="button" id="zp-seed-shuffle" class="zp-btn ghost"
+                      title="Generate a new random seed">🎲 Random</button>
+            </div>
+            <p class="zp-seed-help">
+              Same seed → same board. Share the seed with a friend and play
+              the same game side-by-side.
+            </p>
+          </div>
+
+          <button id="zp-start-btn" class="zp-btn primary big">New Game</button>
+        </div>
+      </div>
+
+      <!-- ============ Clue overlay ============================== -->
+      <div id="zp-clue" class="zp-modal" hidden>
+        <div class="zp-clue-card">
+          <div class="zp-clue-head">
+            <span id="zp-clue-cat">CATEGORY</span>
+            <span id="zp-clue-value">$0</span>
+          </div>
+          <!-- Daily Double splash -->
+          <div id="zp-dd-splash" class="zp-dd" hidden>
+            <div class="zp-dd-banner">DAILY DOUBLE</div>
+            <div class="zp-dd-wager-row">
+              <label for="zp-dd-wager">Your wager:</label>
+              <input id="zp-dd-wager" type="number" min="0" />
+              <span class="zp-dd-max" id="zp-dd-max"></span>
+            </div>
+            <button id="zp-dd-confirm" class="zp-btn primary">Wager &amp; See Clue</button>
+          </div>
+          <!-- Clue body -->
+          <div id="zp-clue-body" class="zp-clue-body" hidden>
+            <div class="zp-clue-text" id="zp-clue-text"></div>
+            <form id="zp-answer-form" class="zp-answer-form">
+              <input id="zp-answer-input" type="text" autocomplete="off"
+                     placeholder="What is..." />
+              <div class="zp-clue-actions">
+                <button type="submit" class="zp-btn primary">Submit</button>
+                <button type="button" id="zp-skip-btn" class="zp-btn ghost">Skip</button>
+              </div>
+            </form>
+          </div>
+          <!-- Result -->
+          <div id="zp-result" class="zp-result" hidden>
+            <div class="zp-result-banner" id="zp-result-banner">CORRECT</div>
+            <div class="zp-result-detail">
+              <div class="zp-result-row">
+                <span class="zp-result-label">Correct answer:</span>
+                <span class="zp-result-value" id="zp-result-correct"></span>
+              </div>
+              <div class="zp-result-row" id="zp-result-yours-row">
+                <span class="zp-result-label">You answered:</span>
+                <span class="zp-result-value" id="zp-result-yours"></span>
+              </div>
+              <div class="zp-result-row">
+                <span class="zp-result-label">Score change:</span>
+                <span class="zp-result-value" id="zp-result-delta"></span>
+              </div>
+            </div>
+            <div class="zp-result-actions">
+              <button type="button" id="zp-override-btn" class="zp-btn ghost" hidden>
+                Mark as Correct
+              </button>
+              <button type="button" id="zp-continue-btn" class="zp-btn primary">Continue</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ Final Jeopardy ============================ -->
+      <div id="zp-final" class="zp-modal" hidden>
+        <div class="zp-final-card">
+          <div class="zp-final-head">FINAL JEOPARDY</div>
+          <!-- Category reveal + wager -->
+          <div id="zp-final-wager-stage">
+            <div class="zp-final-cat" id="zp-final-cat">CATEGORY</div>
+            <div class="zp-final-wager-row">
+              <label for="zp-final-wager">Your wager (0–<span id="zp-final-wager-max">0</span>):</label>
+              <input id="zp-final-wager" type="number" min="0" />
+            </div>
+            <button id="zp-final-wager-confirm" class="zp-btn primary big">
+              Lock In Wager
+            </button>
+          </div>
+          <!-- Clue + answer -->
+          <div id="zp-final-clue-stage" hidden>
+            <div class="zp-clue-text" id="zp-final-clue-text"></div>
+            <form id="zp-final-answer-form" class="zp-answer-form">
+              <input id="zp-final-answer-input" type="text" autocomplete="off"
+                     placeholder="What is..." />
+              <button type="submit" class="zp-btn primary">Submit</button>
+            </form>
+          </div>
+          <!-- Result -->
+          <div id="zp-final-result" hidden>
+            <div class="zp-result-banner" id="zp-final-result-banner">CORRECT</div>
+            <div class="zp-result-detail">
+              <div class="zp-result-row">
+                <span class="zp-result-label">Correct answer:</span>
+                <span class="zp-result-value" id="zp-final-result-correct"></span>
+              </div>
+              <div class="zp-result-row">
+                <span class="zp-result-label">Your wager:</span>
+                <span class="zp-result-value" id="zp-final-result-wager"></span>
+              </div>
+            </div>
+            <div class="zp-result-actions">
+              <button type="button" id="zp-final-override" class="zp-btn ghost" hidden>
+                Mark as Correct
+              </button>
+              <button type="button" id="zp-final-continue" class="zp-btn primary">See Final Score</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ End of game =============================== -->
+      <div id="zp-end" class="zp-modal" hidden>
+        <div class="zp-dialog">
+          <div class="zp-dialog-eyebrow">GAME OVER</div>
+          <h2>Final Results</h2>
+          <table class="zp-end-stats">
+            <tr><th>Total score (with wagers)</th><td id="zp-end-total">$0</td></tr>
+            <tr><th>Coryat score</th><td id="zp-end-coryat">$0</td></tr>
+            <tr><th>Correct</th><td id="zp-end-correct">0</td></tr>
+            <tr><th>Wrong</th><td id="zp-end-wrong">0</td></tr>
+            <tr><th>Skipped</th><td id="zp-end-skipped">0</td></tr>
+          </table>
+          <button id="zp-end-restart" class="zp-btn primary big">Play Again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- clues.js is large (~15MB); loaded lazily when New Game is clicked -->
+    <script src="zachpardy.js"></script>
+  </body>
+</html>

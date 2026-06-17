@@ -1,0 +1,695 @@
+/* ============================================================
+   WikiRacer — its own visual language (Light/Dark themes).
+   Lives inside an iframe within the OS, so it owns its viewport.
+   ============================================================ */
+
+:root {
+  --bg: #f7f6f1;
+  --panel: #ebe9e0;
+  --panel-2: #f3f1e8;
+  --text: #1a1a1a;
+  --muted: #6a6660;
+  --border: #cbc7b9;
+  --border-strong: #aaa595;
+  --accent: #b8322b;
+  --accent-text: #ffffff;
+  --link: #0645ad;
+  --link-visited: #0b0080;
+  --shadow: rgba(0, 0, 0, 0.08);
+}
+
+body.theme-dark {
+  --bg: #14161b;
+  --panel: #1c1f26;
+  --panel-2: #232730;
+  --text: #e8e8e3;
+  --muted: #9a9a92;
+  --border: #2e333d;
+  --border-strong: #4a505c;
+  --accent: #e85a52;
+  --accent-text: #ffffff;
+  --link: #6ea8ff;
+  --link-visited: #b388ff;
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  font-family: "Georgia", "Times New Roman", serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ---------- Layout ---------------------------------------- */
+#wr-app {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/* ---------- Panel ----------------------------------------- */
+#wr-panel {
+  width: 280px;
+  min-width: 220px;
+  max-width: 60vw;
+  flex: 0 0 auto;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+body.panel-minimized #wr-panel { display: none; }
+
+#wr-panel-min {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: 0;
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--muted);
+  z-index: 3;
+  padding: 0;
+}
+#wr-panel-min:hover { color: var(--text); }
+
+/* Drag handle on the right edge — drag to resize */
+.wr-resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 5px;
+  height: 100%;
+  cursor: col-resize;
+  background: transparent;
+  z-index: 4;
+  transition: background 0.15s ease;
+}
+.wr-resize-handle:hover,
+.wr-resize-handle.dragging {
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+/* Floating "+" button — shown when panel is minimized */
+#wr-restore {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  background: var(--panel);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 90;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+#wr-restore:hover { filter: brightness(0.96); background: var(--panel-2); }
+#wr-restore[hidden] { display: none; }
+
+.wr-panel-inner {
+  flex: 1;
+  padding: 38px 16px 14px;
+  overflow-y: auto;
+}
+
+.wr-panel-section h3 {
+  font-family: "Georgia", serif;
+  font-size: 20px;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+
+.wr-panel-group {
+  margin-bottom: 16px;
+}
+
+.wr-label {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wr-target-image {
+  display: block;
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  margin: 6px 0 8px;
+}
+.wr-target-image[hidden] { display: none; }
+
+.wr-target-title {
+  font-size: 19px;
+  font-weight: bold;
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+
+.wr-timer {
+  font-family: "Menlo", "Courier New", monospace;
+  font-size: 28px;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.wr-hops-chip {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  text-transform: none;
+}
+
+.wr-history-group ol {
+  margin: 4px 0 0;
+  padding-left: 20px;
+  font-size: 13px;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style-type: decimal;
+}
+.wr-history-group ol li {
+  padding: 2px 0;
+  line-height: 1.3;
+  word-wrap: break-word;
+}
+.wr-history-group ol li.current {
+  font-weight: bold;
+  color: var(--accent);
+}
+
+.wr-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+/* Seed UI in the side panel */
+.wr-seed-row {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  margin-top: 4px;
+}
+.wr-seed-row input {
+  flex: 1;
+  min-width: 0;
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  padding: 6px 8px;
+  text-transform: uppercase;
+  outline: none;
+}
+.wr-seed-row input:focus {
+  border-color: var(--accent);
+}
+.wr-seed-row button {
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 1;
+}
+.wr-seed-help {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.wr-seed-chip {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 3px 8px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+.wr-check input {
+  margin: 0;
+}
+
+.wr-panel-inner hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+
+.wr-small {
+  font-size: 12px;
+}
+.muted {
+  color: var(--muted);
+}
+
+.wr-credit {
+  position: sticky;
+  bottom: 0;
+  margin-top: 24px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+/* ---------- Buttons --------------------------------------- */
+.wr-btn {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding: 8px 14px;
+  border: 1px solid var(--border-strong);
+  background: var(--panel-2);
+  color: var(--text);
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.05s ease;
+}
+.wr-btn:hover { filter: brightness(0.97); }
+.wr-btn:active { transform: translateY(1px); }
+.wr-btn.primary {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.wr-btn.primary:hover { filter: brightness(1.08); }
+.wr-btn.ghost {
+  background: transparent;
+}
+.wr-btn.big {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+.wr-btn:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+/* ---------- Stage ----------------------------------------- */
+#wr-stage {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+.wr-screen {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+}
+/* Specificity override — ID rules below set display:flex which would
+   otherwise win over .wr-screen[hidden]. Listed here so that any
+   [hidden] screen is reliably removed from the layout. */
+#wr-welcome[hidden],
+#wr-reveal[hidden],
+#wr-article-wrap[hidden] { display: none; }
+
+/* ---------- Welcome --------------------------------------- */
+#wr-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  transition: opacity 0.35s ease;
+}
+#wr-welcome.fading-out {
+  opacity: 0;
+  pointer-events: none;
+}
+.wr-welcome-card {
+  max-width: 520px;
+}
+.wr-logo {
+  font-family: "Georgia", serif;
+  font-size: 64px;
+  font-weight: bold;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 18px;
+}
+.wr-logo span {
+  color: var(--accent);
+  font-style: italic;
+}
+.wr-welcome-card .lede {
+  font-size: 18px;
+  color: var(--text);
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+.wr-welcome-card .hint {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* ---------- Reveal animation ------------------------------ */
+#wr-reveal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 40px;
+}
+.wr-reveal-card {
+  flex: 1;
+  max-width: 320px;
+  padding: 36px 24px;
+  background: var(--panel-2);
+  border: 2px solid var(--border-strong);
+  text-align: center;
+  box-shadow: 0 20px 50px var(--shadow);
+  opacity: 0;
+  transform: scale(0.6) translateX(0);
+}
+body.phase-revealing .wr-reveal-card.start {
+  animation: wrSlideInL 0.65s cubic-bezier(0.18, 0.9, 0.32, 1.2) 0.05s forwards;
+}
+body.phase-revealing .wr-reveal-card.target {
+  animation: wrSlideInR 0.65s cubic-bezier(0.18, 0.9, 0.32, 1.2) 0.55s forwards;
+}
+@keyframes wrSlideInL {
+  from { opacity: 0; transform: translateX(-280px) scale(0.7); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes wrSlideInR {
+  from { opacity: 0; transform: translateX(280px) scale(0.7); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+.wr-reveal-label {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.wr-reveal-title {
+  font-family: "Georgia", serif;
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.wr-reveal-arrow {
+  font-size: 56px;
+  color: var(--accent);
+  opacity: 0;
+}
+body.phase-revealing .wr-reveal-arrow {
+  animation: wrArrow 0.6s ease 1.0s forwards;
+}
+@keyframes wrArrow {
+  0%   { opacity: 0; transform: scale(0.3); }
+  60%  { opacity: 1; transform: scale(1.3); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ---------- Article (Wikipedia content) ------------------- */
+#wr-article-wrap {
+  background: var(--bg);
+}
+.wr-article {
+  margin: 0;
+  padding: 24px 32px 80px;
+  line-height: 1.62;
+  font-size: 15px;
+}
+.wr-article h1 {
+  font-family: "Georgia", serif;
+  font-size: 36px;
+  font-weight: normal;
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.15;
+}
+.wr-article h2 {
+  font-family: "Georgia", serif;
+  font-size: 24px;
+  font-weight: normal;
+  margin: 28px 0 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.wr-article h3 {
+  font-size: 18px;
+  margin: 22px 0 8px;
+  font-weight: bold;
+}
+.wr-article h4 { font-size: 15px; margin: 16px 0 6px; }
+.wr-article p { margin: 0 0 10px; }
+.wr-article ul, .wr-article ol { margin: 8px 0; padding-left: 24px; }
+.wr-article li { margin: 2px 0; }
+
+.wr-article a {
+  color: var(--link);
+  text-decoration: none;
+}
+.wr-article a:hover { text-decoration: underline; }
+.wr-article a:visited { color: var(--link-visited); }
+.wr-article a.external,
+.wr-article a.blocked {
+  color: var(--muted);
+  cursor: not-allowed;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--muted);
+}
+.wr-article a.external:hover,
+.wr-article a.blocked:hover { text-decoration: none; }
+
+/* Infobox */
+.wr-article table {
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 13px;
+}
+.wr-article .infobox,
+.wr-article table[class*="infobox"] {
+  float: right;
+  width: 300px;
+  margin: 0 0 16px 20px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  padding: 6px;
+  clear: right;
+}
+.wr-article .infobox th,
+.wr-article .infobox td {
+  padding: 4px 6px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+.wr-article .infobox caption {
+  font-weight: bold;
+  padding: 6px;
+  font-size: 14px;
+}
+
+.wr-article img {
+  max-width: 100%;
+  height: auto;
+}
+.wr-article figure {
+  margin: 8px 0;
+  text-align: center;
+}
+.wr-article figcaption {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.wr-article .thumb,
+.wr-article figure[typeof~="mw:File/Thumb"] {
+  float: right;
+  margin: 0 0 12px 16px;
+  max-width: 280px;
+  background: var(--panel-2);
+  padding: 6px;
+  border: 1px solid var(--border);
+}
+.wr-article hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 18px 0;
+}
+.wr-article sup.reference,
+.wr-article .reference {
+  font-size: 11px;
+}
+.wr-article .mw-editsection { display: none; } /* not interactive here */
+.wr-article .navbox,
+.wr-article .vertical-navbox { display: none; } /* trim noise */
+.wr-article style { display: none; }
+
+/* Loading overlay */
+#wr-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  z-index: 10;
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+#wr-loading[hidden] { display: none; }
+.wr-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: wrSpin 0.8s linear infinite;
+}
+@keyframes wrSpin { to { transform: rotate(360deg); } }
+
+/* ---------- Win modal ------------------------------------- */
+.wr-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: wrFadeBg 0.3s ease forwards;
+}
+.wr-modal[hidden] { display: none; }
+@keyframes wrFadeBg {
+  from { background: rgba(0, 0, 0, 0); }
+  to   { background: rgba(0, 0, 0, 0.55); }
+}
+.wr-dialog {
+  background: var(--bg);
+  border: 2px solid var(--border-strong);
+  padding: 28px 36px 24px;
+  text-align: center;
+  min-width: 320px;
+  max-width: 92%;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  animation: wrPopIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) forwards;
+  transform: scale(0.7);
+  opacity: 0;
+}
+@keyframes wrPopIn {
+  to { transform: scale(1); opacity: 1; }
+}
+.wr-dialog-eyebrow {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.wr-dialog h2 {
+  font-family: "Georgia", serif;
+  font-size: 28px;
+  font-weight: normal;
+  margin: 0 0 20px;
+}
+.wr-stats {
+  margin: 0 auto 20px;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+.wr-stats th {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: right;
+  padding: 4px 12px 4px 0;
+  color: var(--muted);
+  font-weight: normal;
+}
+.wr-stats td {
+  text-align: left;
+  padding: 4px 0;
+  font-weight: bold;
+  font-family: "Menlo", "Courier New", monospace;
+}
+
+/* ---------- Confetti -------------------------------------- */
+#wr-confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+#wr-confetti[hidden] { display: none; }
+
+/* ---------- Mobile ---------------------------------------- */
+@media (max-width: 720px) {
+  #wr-app {
+    flex-direction: column-reverse;
+  }
+  #wr-panel {
+    width: 100% !important;
+    max-width: 100%;
+    max-height: 50vh;
+    border-right: 0;
+    border-top: 1px solid var(--border);
+  }
+  .wr-resize-handle { display: none; } /* horizontal resize doesn't make sense in column layout */
+  #wr-reveal { flex-direction: column; gap: 16px; padding: 20px; }
+  .wr-reveal-arrow { transform: rotate(90deg); }
+  .wr-article { padding: 20px 16px 80px; }
+  /* The restore "+" button sits at top-left on desktop, but on a
+     phone that's where the article reading thumb lives — move it
+     to bottom-right where it's out of the way but still tappable. */
+  #wr-restore {
+    top: auto;
+    left: auto;
+    bottom: 16px;
+    right: 16px;
+  }
+}

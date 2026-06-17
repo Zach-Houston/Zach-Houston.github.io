@@ -1,0 +1,227 @@
+/* ============================================================
+   Zachtris — retro-arcade Tetris clone.
+   ============================================================ */
+
+:root {
+  --bg: #0c0e14;
+  --bg-2: #14161e;
+  --bg-3: #1c1f2a;
+  --line: #2a2e3a;
+  --line-bright: #3a4050;
+  --text: #e8ecf3;
+  --muted: #8b8f9c;
+  --accent: #00e5ff;
+  --accent-dim: #007a8a;
+  --warn: #ff5252;
+  --font-sys: "Helvetica", "Arial", sans-serif;
+  --font-mono: "Menlo", "Consolas", "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sys);
+  overflow: hidden;
+  user-select: none;
+}
+
+#zt-root {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  gap: 14px;
+  padding: 14px;
+  min-height: 0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(0,229,255,0.05), transparent 60%),
+    var(--bg);
+}
+
+/* ---------- Panels --------------------------------------- */
+#zt-left, #zt-right {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.zt-section {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+}
+.zt-section h3 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: var(--accent);
+  margin: 0 0 8px;
+  font-weight: 500;
+}
+
+/* ---------- Hold / Next previews -------------------------- */
+#zt-hold, #zt-next {
+  display: block;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  width: 100%;
+  height: auto;
+}
+#zt-hold { aspect-ratio: 1 / 1; }
+#zt-next { aspect-ratio: 3 / 8; }
+
+/* ---------- Controls -------------------------------------- */
+.zt-controls dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 10px;
+  margin: 0;
+  font-size: 11px;
+}
+.zt-controls dt {
+  font-family: var(--font-mono);
+  background: var(--bg-3);
+  border: 1px solid var(--line-bright);
+  padding: 2px 6px;
+  text-align: center;
+  font-size: 11px;
+  min-width: 22px;
+  color: var(--accent);
+}
+.zt-controls dd {
+  margin: 0;
+  align-self: center;
+  color: var(--muted);
+}
+
+/* ---------- Stats ---------------------------------------- */
+.zt-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.zt-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+}
+.zt-stat-value {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  color: var(--text);
+  margin-top: 2px;
+}
+
+/* ---------- Stage --------------------------------------- */
+#zt-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.zt-title-bar {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.42em;
+  color: var(--accent);
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.6);
+}
+
+/* Sized dynamically by JS — see fitCanvas() in zachtris.js */
+#zt-field-wrap {
+  position: relative;
+  border: 2px solid var(--line-bright);
+  background: #000;
+  box-shadow:
+    0 0 0 1px var(--bg-3),
+    0 0 32px rgba(0, 229, 255, 0.12);
+}
+#zt-field {
+  display: block;
+}
+
+/* ---------- Overlay ------------------------------------- */
+.zt-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 10, 16, 0.92);
+  text-align: center;
+  padding: 24px;
+  gap: 12px;
+}
+.zt-overlay[hidden] { display: none; }
+
+.zt-overlay-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  color: var(--accent);
+}
+.zt-overlay-title {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  letter-spacing: 0.18em;
+  color: var(--text);
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+}
+.zt-overlay-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.zt-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  padding: 10px 22px;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  cursor: pointer;
+  margin-top: 8px;
+  text-transform: uppercase;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.zt-btn:hover {
+  background: var(--accent);
+  color: #000;
+}
+.zt-btn.primary {
+  background: var(--accent);
+  color: #000;
+}
+.zt-btn.primary:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+/* ---------- Mobile -------------------------------------- */
+@media (max-width: 700px) {
+  #zt-root { flex-direction: column; padding: 8px; gap: 8px; }
+  #zt-left, #zt-right { width: 100%; flex-direction: row; flex-wrap: wrap; }
+  #zt-left .zt-section, #zt-right .zt-section { flex: 1 1 0; }
+  .zt-controls { flex-basis: 100%; }
+  .zt-stats { flex-direction: row; }
+  .zt-stat { flex: 1; }
+}

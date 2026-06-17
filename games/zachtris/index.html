@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Zachtris</title>
+    <link rel="stylesheet" href="zachtris.css" />
+  </head>
+  <body>
+    <div id="zt-root" tabindex="0">
+      <!-- ============ Left panel ============================== -->
+      <aside id="zt-left">
+        <div class="zt-section">
+          <h3>HOLD</h3>
+          <canvas id="zt-hold" width="120" height="120"></canvas>
+        </div>
+
+        <div class="zt-section zt-controls">
+          <h3>CONTROLS</h3>
+          <dl>
+            <dt>←</dt><dd>Move left</dd>
+            <dt>→</dt><dd>Move right</dd>
+            <dt>↓</dt><dd>Soft drop</dd>
+            <dt>↑</dt><dd>Hard drop</dd>
+            <dt>Z</dt><dd>Rotate ↺</dd>
+            <dt>X</dt><dd>Rotate ↻</dd>
+            <dt>␣</dt><dd>Hold</dd>
+            <dt>P</dt><dd>Pause</dd>
+          </dl>
+        </div>
+      </aside>
+
+      <!-- ============ Playfield =============================== -->
+      <main id="zt-stage">
+        <div class="zt-title-bar">ZACHTRIS</div>
+        <div id="zt-field-wrap">
+          <canvas id="zt-field" width="280" height="560"></canvas>
+          <div id="zt-overlay" class="zt-overlay">
+            <div class="zt-overlay-eyebrow" id="zt-overlay-eyebrow">READY</div>
+            <div class="zt-overlay-title" id="zt-overlay-title">ZACHTRIS</div>
+            <div class="zt-overlay-sub" id="zt-overlay-sub">
+              Click START to play
+            </div>
+            <button id="zt-start" class="zt-btn primary">Start</button>
+          </div>
+        </div>
+      </main>
+
+      <!-- ============ Right panel ============================= -->
+      <aside id="zt-right">
+        <div class="zt-section">
+          <h3>NEXT</h3>
+          <canvas id="zt-next" width="120" height="320"></canvas>
+        </div>
+
+        <div class="zt-section zt-stats">
+          <div class="zt-stat">
+            <div class="zt-stat-label">SCORE</div>
+            <div class="zt-stat-value" id="zt-score">0</div>
+          </div>
+          <div class="zt-stat">
+            <div class="zt-stat-label">LINES</div>
+            <div class="zt-stat-value" id="zt-lines">0</div>
+          </div>
+          <div class="zt-stat">
+            <div class="zt-stat-label">LEVEL</div>
+            <div class="zt-stat-value" id="zt-level">1</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <script src="zachtris.js"></script>
+  </body>
+</html>

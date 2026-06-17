@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Z // Desktop</title>
+    <meta name="description" content="Personal site, rendered as a retro desktop." />
+    <link rel="stylesheet" href="assets/css/os.css" />
+  </head>
+  <body>
+    <!-- ============================================================
+         DESKTOP
+         ============================================================ -->
+    <main id="desktop" aria-label="Desktop">
+      <div id="icons" role="grid">
+        <button class="desktop-icon" data-app="about" type="button">
+          <span class="icon-img" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" fill="#ece9d8" stroke="#000"/><circle cx="16" cy="13" r="5" fill="#fdd9a8" stroke="#000"/><path d="M6 28 Q16 18 26 28 Z" fill="#4a6ea8" stroke="#000"/></svg>
+          </span>
+          <span class="icon-label">About&nbsp;Me</span>
+        </button>
+
+        <button class="desktop-icon" data-app="resume" type="button">
+          <span class="icon-img" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><path d="M5 2h16l6 6v22H5z" fill="#fff" stroke="#000"/><path d="M21 2v6h6" fill="none" stroke="#000"/><path d="M9 14h14M9 18h14M9 22h10" stroke="#000"/></svg>
+          </span>
+          <span class="icon-label">Resume</span>
+        </button>
+
+        <button class="desktop-icon" data-app="projects" type="button">
+          <span class="icon-img" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><path d="M2 8h10l3 3h15v18H2z" fill="#f5c845" stroke="#000"/><path d="M2 11h28v18H2z" fill="#ffd966" stroke="#000"/></svg>
+          </span>
+          <span class="icon-label">Projects</span>
+        </button>
+
+        <button class="desktop-icon" data-app="contact" type="button">
+          <span class="icon-img" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" fill="#fff" stroke="#000"/><path d="M3 7 16 18 29 7" fill="none" stroke="#000"/></svg>
+          </span>
+          <span class="icon-label">Contact</span>
+        </button>
+
+        <button class="desktop-icon" data-app="readme" type="button">
+          <span class="icon-img" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><rect x="6" y="3" width="20" height="26" fill="#fff" stroke="#000"/><path d="M10 9h12M10 13h12M10 17h12M10 21h8" stroke="#000"/></svg>
+          </span>
+          <span class="icon-label">Read&nbsp;Me</span>
+        </button>
+      </div>
+
+      <!-- ----------------------------------------------------------
+           Games corner — one icon per game, top-right of the desktop.
+           To add a game: register it in APPS in os.js, then add a
+           button here with matching data-app.
+           ---------------------------------------------------------- -->
+      <div id="icons-right" role="grid">
+        <button class="desktop-icon" data-app="wikiracer" type="button">
+          <span class="icon-img" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" fill="#fff" stroke="#000"/><text x="16" y="24" text-anchor="middle" font-family="Times New Roman, Georgia, serif" font-size="22" font-weight="bold" fill="#000">W</text></svg>
+          </span>
+          <span class="icon-label">WikiRacer</span>
+        </button>
+
+        <button class="desktop-icon" data-app="zachtris" type="button">
+          <span class="icon-img" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><rect x="2"  y="2"  width="14" height="14" fill="#00e5ff" stroke="#000"/><rect x="16" y="2"  width="14" height="14" fill="#ba68c8" stroke="#000"/><rect x="2"  y="16" width="14" height="14" fill="#ef5350" stroke="#000"/><rect x="16" y="16" width="14" height="14" fill="#66bb6a" stroke="#000"/></svg>
+          </span>
+          <span class="icon-label">Zachtris</span>
+        </button>
+
+        <button class="desktop-icon" data-app="zachpardy" type="button">
+          <span class="icon-img" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" fill="#060ce9" stroke="#000"/><text x="16" y="22" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#f5d20d">$</text></svg>
+          </span>
+          <span class="icon-label">Zachpardy</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- ============================================================
+         WINDOW LAYER (populated by JS)
+         ============================================================ -->
+    <div id="window-layer" aria-live="polite"></div>
+
+    <!-- ============================================================
+         START MENU
+         ============================================================ -->
+    <nav id="start-menu" hidden>
+      <div class="start-rail">Z<span>OS</span></div>
+      <ul class="start-list">
+        <li data-app="about"><span class="sm-icon">i</span>About Me</li>
+        <li data-app="resume"><span class="sm-icon">≡</span>Resume</li>
+        <li data-app="projects"><span class="sm-icon">▤</span>Projects</li>
+        <li data-app="contact"><span class="sm-icon">@</span>Contact</li>
+        <li class="sep"></li>
+        <li data-app="wikiracer"><span class="sm-icon">W</span>WikiRacer</li>
+        <li data-app="zachtris"><span class="sm-icon">▦</span>Zachtris</li>
+        <li data-app="zachpardy"><span class="sm-icon">$</span>Zachpardy</li>
+        <li class="sep"></li>
+        <li data-app="readme"><span class="sm-icon">?</span>Read Me</li>
+        <li data-action="github"><span class="sm-icon">⌂</span>GitHub</li>
+      </ul>
+    </nav>
+
+    <!-- ============================================================
+         TASKBAR
+         ============================================================ -->
+    <footer id="taskbar">
+      <button id="start-btn" type="button" aria-haspopup="true" aria-expanded="false">
+        <span class="start-logo" aria-hidden="true"></span>
+        <span class="start-text">Start</span>
+      </button>
+      <div class="taskbar-divider"></div>
+      <div id="taskbar-items" role="list"></div>
+      <div id="taskbar-tray">
+        <span id="taskbar-clock">--:--</span>
+      </div>
+    </footer>
+
+    <!-- ============================================================
+         APP CONTENT TEMPLATES
+         Fill these in over time. Each template's HTML becomes the
+         body of the window opened by its matching desktop icon.
+         ============================================================ -->
+    <template data-content="about">
+      <div class="about-page">
+        <div class="about-top">
+          <!-- Photo: swap the inner <svg> for <img src="assets/img/me.jpg" alt="…"> -->
+          <div class="win-photo" aria-label="Photo placeholder">
+            <svg viewBox="0 0 100 130" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <rect width="100" height="130" fill="#cfcfcf"/>
+              <circle cx="50" cy="50" r="22" fill="#8a8a8a"/>
+              <path d="M14 130 Q50 78 86 130 Z" fill="#8a8a8a"/>
+            </svg>
+          </div>
+          <div class="about-intro">
+            <h2>Hi, I'm Z.</h2>
+            <p class="tagline">Builder of small things. Connoisseur of beveled buttons.</p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
+              feugiat, ligula vitae interdum porta, mi quam efficitur nisi, eu
+              suscipit nisi nulla et lectus.
+            </p>
+          </div>
+        </div>
+
+        <fieldset class="win-fieldset">
+          <legend>Quick Facts</legend>
+          <table class="kv">
+            <tr><th>Location</th><td>Somewhere, USA</td></tr>
+            <tr><th>Working on</th><td>This site, apparently</td></tr>
+            <tr><th>Currently into</th><td>Old-school UIs, browser games</td></tr>
+            <tr><th>Favorite OS</th><td>Windows 98 (it shows)</td></tr>
+          </table>
+        </fieldset>
+
+        <fieldset class="win-fieldset">
+          <legend>About this page</legend>
+          <p class="small">
+            This is a personal homepage rendered as a retro desktop. Open the
+            other icons to see resume, projects, and a couple of small games.
+          </p>
+        </fieldset>
+
+        <p class="small muted footnote">Last updated: today &nbsp;·&nbsp; v0.1</p>
+      </div>
+    </template>
+
+    <template data-content="resume">
+      <h2>Resume</h2>
+      <p><em>// Placeholder — drop a PDF in <code>assets/</code> and link it here.</em></p>
+      <p>
+        <a class="link" href="#" onclick="return false;">resume.pdf</a> &nbsp;·&nbsp;
+        <a class="link" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+      </p>
+      <hr />
+      <h3>Experience</h3>
+      <p>Role · Company · Dates</p>
+      <h3>Education</h3>
+      <p>Degree · School · Dates</p>
+    </template>
+
+    <template data-content="projects">
+      <h2>Projects</h2>
+      <p><em>// Placeholder — list repos, demos, write-ups.</em></p>
+      <ul class="file-list">
+        <li>📁 project-one — short description</li>
+        <li>📁 project-two — short description</li>
+        <li>📁 project-three — short description</li>
+      </ul>
+    </template>
+
+    <template data-content="contact">
+      <h2>Contact</h2>
+      <p><em>// Placeholder — fill these in.</em></p>
+      <ul>
+        <li>Email: <a class="link" href="mailto:you@example.com">you@example.com</a></li>
+        <li>GitHub: <a class="link" href="https://github.com/" target="_blank" rel="noreferrer">github.com/you</a></li>
+        <li>LinkedIn: <a class="link" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">linkedin.com/in/you</a></li>
+      </ul>
+    </template>
+
+    <template data-content="readme">
+      <h2>Read Me</h2>
+      <p>This is a personal site styled like an older OS desktop.</p>
+      <ul>
+        <li><strong>Click</strong> a desktop icon to open it.</li>
+        <li><strong>Drag</strong> a window by its title bar.</li>
+        <li><strong>X</strong> closes, <strong>_</strong> minimizes (sends to taskbar).</li>
+        <li>Click a taskbar entry to restore a minimized window.</li>
+      </ul>
+      <p class="muted">Built in plain HTML/CSS/JS — no frameworks.</p>
+    </template>
+
+    <script src="assets/js/os.js"></script>
+  </body>
+</html>

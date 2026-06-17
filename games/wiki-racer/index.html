@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WikiRacer</title>
+    <link rel="stylesheet" href="wiki-racer.css" />
+  </head>
+  <body class="theme-light phase-idle">
+    <!-- Restore "+" button (visible only when panel is minimized) -->
+    <button
+      id="wr-restore"
+      type="button"
+      hidden
+      aria-label="Show panel"
+      title="Show panel"
+    >+</button>
+
+    <div id="wr-app">
+      <!-- ============ Left panel ============================== -->
+      <aside id="wr-panel" aria-label="Race panel">
+        <button
+          id="wr-panel-min"
+          type="button"
+          aria-label="Minimize panel"
+          title="Minimize panel"
+        >×</button>
+        <div class="wr-resize-handle" id="wr-resize-handle" title="Drag to resize"></div>
+
+        <div class="wr-panel-inner">
+          <!-- Idle: options + start -->
+          <section class="wr-panel-section" data-phase="idle">
+            <h3>WikiRacer</h3>
+            <p class="wr-small muted">
+              Race from one random Wikipedia page to another, using only the
+              links on the page.
+            </p>
+
+            <div class="wr-panel-group">
+              <div class="wr-label">Options</div>
+              <label class="wr-check">
+                <input type="checkbox" id="wr-dark-toggle" />
+                <span>Dark mode</span>
+              </label>
+            </div>
+
+            <div class="wr-panel-group">
+              <div class="wr-label">Seed</div>
+              <div class="wr-seed-row">
+                <input id="wr-seed-input" type="text" autocomplete="off"
+                       maxlength="32" spellcheck="false" />
+                <button type="button" id="wr-seed-shuffle"
+                        class="wr-btn ghost"
+                        title="Generate a new random seed">🎲</button>
+              </div>
+              <p class="wr-seed-help">
+                Same seed → same start &amp; target. Share with a friend.
+              </p>
+            </div>
+
+            <button id="wr-start" type="button" class="wr-btn primary big">
+              Start race
+            </button>
+          </section>
+
+          <!-- Playing: target / timer / history / options -->
+          <section class="wr-panel-section" data-phase="playing" hidden>
+            <div class="wr-panel-group wr-target-group">
+              <div class="wr-label">Target</div>
+              <img
+                id="wr-target-image"
+                class="wr-target-image"
+                alt=""
+                hidden
+              />
+              <div class="wr-target-title" id="wr-target-title"></div>
+            </div>
+
+            <div class="wr-panel-group">
+              <div class="wr-label">Time</div>
+              <div class="wr-timer" id="wr-timer">00:00</div>
+            </div>
+
+            <div class="wr-panel-group wr-history-group">
+              <div class="wr-label">
+                Path <span class="wr-hops-chip"><span id="wr-hops">0</span> hops</span>
+              </div>
+              <ol id="wr-history"></ol>
+            </div>
+
+            <div class="wr-panel-group">
+              <div class="wr-label">Seed</div>
+              <div class="wr-seed-chip"><span id="wr-seed-chip">—</span></div>
+            </div>
+
+            <hr />
+
+            <div class="wr-panel-group">
+              <div class="wr-label">Options</div>
+              <label class="wr-check">
+                <input type="checkbox" id="wr-dark-toggle-play" />
+                <span>Dark mode</span>
+              </label>
+            </div>
+
+            <button id="wr-new-race" type="button" class="wr-btn ghost">
+              New race
+            </button>
+          </section>
+
+          <footer class="wr-credit">
+            Content via Wikipedia · CC BY-SA 4.0
+          </footer>
+        </div>
+      </aside>
+
+      <!-- ============ Stage (right side) ===================== -->
+      <main id="wr-stage">
+        <!-- Welcome screen (phase: idle) -->
+        <section id="wr-welcome" class="wr-screen">
+          <div class="wr-welcome-card">
+            <div class="wr-logo">W<span>iki</span>Racer</div>
+            <p class="lede">
+              The classic browser race. Two random pages, one set of rules:
+              you can only click links inside the article.
+            </p>
+            <p class="hint">
+              Press <strong>Start race</strong> in the panel to begin.
+            </p>
+          </div>
+        </section>
+
+        <!-- Reveal animation (phase: revealing) -->
+        <section id="wr-reveal" class="wr-screen" hidden>
+          <div class="wr-reveal-card start">
+            <div class="wr-reveal-label">START</div>
+            <div class="wr-reveal-title" id="wr-reveal-start">—</div>
+          </div>
+          <div class="wr-reveal-arrow">→</div>
+          <div class="wr-reveal-card target">
+            <div class="wr-reveal-label">TARGET</div>
+            <div class="wr-reveal-title" id="wr-reveal-target">—</div>
+          </div>
+        </section>
+
+        <!-- Article (phase: playing / won) -->
+        <section id="wr-article-wrap" class="wr-screen" hidden>
+          <div id="wr-loading" hidden>
+            <div class="wr-spinner" aria-hidden="true"></div>
+            <div class="wr-loading-label">Loading…</div>
+          </div>
+          <article id="wr-article" class="wr-article"></article>
+        </section>
+      </main>
+    </div>
+
+    <!-- ============ Win modal ================================ -->
+    <div id="wr-win" class="wr-modal" hidden>
+      <div class="wr-dialog">
+        <div class="wr-dialog-eyebrow">YOU MADE IT</div>
+        <h2 id="wr-win-headline">Reached the target!</h2>
+        <table class="wr-stats">
+          <tr><th>Hops</th><td><span id="wr-win-hops">0</span></td></tr>
+          <tr><th>Time</th><td><span id="wr-win-time">00:00</span></td></tr>
+        </table>
+        <button id="wr-play-again" type="button" class="wr-btn primary">
+          Race again
+        </button>
+      </div>
+    </div>
+
+    <canvas id="wr-confetti" hidden></canvas>
+
+    <script src="wiki-racer.js"></script>
+  </body>
+</html>

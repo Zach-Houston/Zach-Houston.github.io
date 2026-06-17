@@ -1,0 +1,548 @@
+/* ============================================================
+   Zachpardy — Jeopardy-style solo trivia.
+   Color palette: classic Jeopardy blue + gold.
+   ============================================================ */
+
+:root {
+  --jp-blue:        #060ce9;   /* iconic Jeopardy board blue */
+  --jp-blue-dark:   #030680;
+  --jp-blue-darker: #020452;
+  --jp-gold:        #f5d20d;   /* dollar-amount yellow */
+  --jp-cream:       #f7e8a4;
+  --bg:             #0b0d1a;
+  --bg-2:           #15182a;
+  --line:           #1f2540;
+  --text:           #ffffff;
+  --muted:          #9098b3;
+  --good:           #43c873;
+  --bad:            #e85a52;
+
+  --font-serif: "Georgia", "Times New Roman", serif;
+  --font-sans:  "Helvetica", "Arial", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  overflow: hidden;
+}
+
+#zp-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px;
+  gap: 12px;
+}
+
+/* ---------- Header ---------------------------------------- */
+#zp-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+}
+.zp-brand {
+  font-family: var(--font-serif);
+  font-weight: bold;
+  font-size: 22px;
+  letter-spacing: 0.12em;
+  color: var(--jp-gold);
+  text-shadow: 0 0 12px rgba(245,210,13,0.3);
+}
+.zp-round {
+  flex: 1;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  text-transform: uppercase;
+  text-align: center;
+}
+.zp-seed-chip {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 6px 10px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.zp-seed-chip[hidden] { display: none; }
+.zp-seed-chip-label {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+}
+.zp-seed-chip-value {
+  font-family: var(--font-mono, "Menlo", monospace);
+  font-size: 13px;
+  color: var(--jp-cream);
+  letter-spacing: 0.1em;
+}
+
+.zp-scores { display: flex; gap: 10px; }
+.zp-score-box {
+  background: var(--jp-blue-darker);
+  border: 1px solid var(--jp-blue);
+  padding: 6px 14px;
+  min-width: 100px;
+  text-align: center;
+}
+.zp-score-label {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--jp-cream);
+}
+.zp-score-value {
+  font-family: var(--font-serif);
+  font-weight: bold;
+  font-size: 20px;
+  color: var(--jp-gold);
+  margin-top: 1px;
+}
+
+/* ---------- Board ----------------------------------------- */
+#zp-board {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: 60px repeat(5, 1fr);
+  gap: 4px;
+  min-height: 0;
+}
+.zp-cat-cell {
+  background: var(--jp-blue-dark);
+  border: 1px solid var(--jp-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-weight: bold;
+  font-size: clamp(10px, 1.1vw, 14px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+  line-height: 1.15;
+}
+.zp-clue-cell {
+  background: var(--jp-blue);
+  border: 1px solid var(--jp-blue-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.06s ease;
+  font-family: var(--font-serif);
+  font-weight: bold;
+  font-size: clamp(18px, 2.6vw, 32px);
+  color: var(--jp-gold);
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.6);
+  user-select: none;
+}
+.zp-clue-cell:hover:not(.used) { filter: brightness(1.18); }
+.zp-clue-cell:active:not(.used) { transform: translateY(1px); }
+.zp-clue-cell.used {
+  background: #000;
+  color: transparent;
+  cursor: default;
+  border-color: var(--line);
+}
+
+/* ---------- Round-transition splash --------------------- */
+.zp-splash {
+  position: fixed;
+  inset: 0;
+  background: var(--jp-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  overflow: hidden;
+}
+.zp-splash[hidden] { display: none; }
+.zp-splash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(245,210,13,0.10),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+.zp-splash-text {
+  font-family: var(--font-serif);
+  font-weight: bold;
+  font-size: clamp(40px, 9vw, 110px);
+  color: var(--jp-gold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow:
+    6px 6px 0 var(--jp-blue-darker),
+    0 0 40px rgba(245,210,13,0.45);
+  white-space: nowrap;
+}
+.zp-splash-text.anim {
+  animation: zp-splash-reveal 2200ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+@keyframes zp-splash-reveal {
+  0%   { opacity: 0; transform: scale(0.4); letter-spacing: 0.4em; }
+  18%  { opacity: 1; transform: scale(1);   letter-spacing: 0.08em; }
+  82%  { opacity: 1; transform: scale(1);   letter-spacing: 0.08em; }
+  100% { opacity: 0; transform: scale(1.18); letter-spacing: 0.04em; }
+}
+
+/* ---------- Modal --------------------------------------- */
+.zp-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 20px;
+}
+.zp-modal[hidden] { display: none; }
+
+.zp-dialog {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  padding: 28px 32px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+.zp-dialog h1, .zp-dialog h2 {
+  margin: 0 0 12px;
+  font-family: var(--font-serif);
+}
+.zp-dialog-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--jp-gold);
+  margin-bottom: 8px;
+}
+.zp-logo {
+  font-size: 38px;
+  color: var(--jp-gold);
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+.zp-lede {
+  color: var(--muted);
+  margin: 0 0 20px;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.zp-seed-block {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--line);
+  padding: 14px 16px;
+  margin: 0 0 18px;
+  text-align: left;
+}
+.zp-seed-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--jp-cream);
+  margin-bottom: 8px;
+}
+.zp-seed-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  margin-bottom: 8px;
+}
+.zp-seed-row input {
+  flex: 1;
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  background: var(--bg);
+  border: 1px solid var(--jp-gold);
+  color: var(--jp-gold);
+  padding: 8px 12px;
+  text-transform: uppercase;
+  outline: none;
+}
+.zp-seed-row input:focus {
+  box-shadow: 0 0 0 2px rgba(245,210,13,0.3);
+}
+.zp-seed-row button {
+  padding: 8px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.zp-seed-help {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+/* ---------- Buttons ------------------------------------- */
+.zp-btn {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  padding: 9px 18px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.05s ease;
+  text-transform: uppercase;
+}
+.zp-btn:hover { background: rgba(255,255,255,0.06); }
+.zp-btn:active { transform: translateY(1px); }
+.zp-btn.primary {
+  background: var(--jp-gold);
+  color: #000;
+  border-color: var(--jp-gold);
+}
+.zp-btn.primary:hover { filter: brightness(1.1); }
+.zp-btn.ghost { color: var(--muted); }
+.zp-btn.ghost:hover { color: var(--text); }
+.zp-btn.big { padding: 12px 26px; font-size: 14px; }
+
+/* ---------- Clue card ----------------------------------- */
+.zp-clue-card {
+  background: var(--jp-blue);
+  border: 2px solid var(--jp-gold);
+  padding: 36px 40px;
+  max-width: 640px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.zp-clue-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid rgba(245,210,13,0.4);
+  padding-bottom: 10px;
+  margin-bottom: 24px;
+  font-family: var(--font-sans);
+  letter-spacing: 0.18em;
+  color: var(--jp-cream);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.zp-clue-head span:last-child {
+  font-family: var(--font-serif);
+  font-weight: bold;
+  font-size: 22px;
+  color: var(--jp-gold);
+  letter-spacing: 0;
+}
+
+.zp-clue-text {
+  font-family: var(--font-sans);
+  font-weight: bold;
+  font-size: clamp(18px, 2vw, 26px);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: #fff;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+  margin: 0 0 26px;
+  text-transform: uppercase;
+}
+
+.zp-answer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.zp-answer-form input[type="text"] {
+  width: 100%;
+  max-width: 420px;
+  padding: 10px 14px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  background: var(--bg-2);
+  border: 1px solid var(--jp-gold);
+  color: var(--text);
+  outline: none;
+}
+.zp-answer-form input[type="text"]:focus { box-shadow: 0 0 0 2px rgba(245,210,13,0.4); }
+.zp-clue-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* ---------- Daily Double splash --------------------------- */
+.zp-dd-banner {
+  font-family: var(--font-serif);
+  font-weight: bold;
+  font-size: 44px;
+  letter-spacing: 0.12em;
+  color: var(--jp-gold);
+  text-shadow: 3px 3px 0 rgba(0,0,0,0.5);
+  margin-bottom: 24px;
+  animation: zp-dd-pop 0.5s cubic-bezier(0.2,0.9,0.3,1.3);
+}
+@keyframes zp-dd-pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.zp-dd-wager-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  color: var(--jp-cream);
+}
+.zp-dd-wager-row input {
+  width: 140px;
+  padding: 8px 12px;
+  font-family: var(--font-serif);
+  font-weight: bold;
+  font-size: 18px;
+  background: var(--bg-2);
+  border: 1px solid var(--jp-gold);
+  color: var(--jp-gold);
+  text-align: right;
+}
+.zp-dd-max { font-size: 12px; color: var(--jp-cream); opacity: 0.85; }
+
+/* ---------- Result panel --------------------------------- */
+.zp-result {
+  /* shown inside .zp-clue-card */
+}
+.zp-result-banner {
+  font-family: var(--font-serif);
+  font-weight: bold;
+  font-size: 32px;
+  letter-spacing: 0.16em;
+  margin-bottom: 18px;
+}
+.zp-result-banner.good { color: var(--good); }
+.zp-result-banner.bad  { color: var(--bad); }
+
+.zp-result-detail {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+.zp-result-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 0;
+}
+.zp-result-row[hidden] { display: none; }
+.zp-result-label { color: var(--jp-cream); }
+.zp-result-value { color: #fff; font-weight: 600; }
+.zp-result-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ---------- Final Jeopardy card -------------------------- */
+.zp-final-card {
+  background: var(--jp-blue);
+  border: 3px solid var(--jp-gold);
+  padding: 36px 40px;
+  max-width: 640px;
+  width: 100%;
+  text-align: center;
+}
+.zp-final-head {
+  font-family: var(--font-serif);
+  font-weight: bold;
+  font-size: 28px;
+  letter-spacing: 0.16em;
+  color: var(--jp-gold);
+  margin-bottom: 18px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+}
+.zp-final-cat {
+  font-family: var(--font-sans);
+  font-weight: bold;
+  font-size: 22px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 24px;
+  padding: 14px;
+  background: var(--jp-blue-darker);
+  border: 1px solid var(--jp-blue-dark);
+}
+.zp-final-wager-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  color: var(--jp-cream);
+}
+.zp-final-wager-row input {
+  width: 140px;
+  padding: 8px 12px;
+  font-family: var(--font-serif);
+  font-weight: bold;
+  font-size: 18px;
+  background: var(--bg-2);
+  border: 1px solid var(--jp-gold);
+  color: var(--jp-gold);
+  text-align: right;
+}
+
+/* ---------- End-of-game stats --------------------------- */
+.zp-end-stats {
+  width: 100%;
+  margin: 14px 0 18px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.zp-end-stats th {
+  text-align: left;
+  padding: 6px 12px;
+  color: var(--muted);
+  font-weight: normal;
+}
+.zp-end-stats td {
+  text-align: right;
+  padding: 6px 12px;
+  font-family: var(--font-serif);
+  font-weight: bold;
+  color: var(--jp-gold);
+  font-size: 16px;
+}
+
+/* ---------- Mobile -------------------------------------- */
+@media (max-width: 700px) {
+  #zp-board {
+    grid-template-rows: 48px repeat(5, 1fr);
+    gap: 2px;
+  }
+  .zp-cat-cell { font-size: 9px; padding: 2px; }
+  .zp-clue-cell { font-size: 16px; }
+  .zp-clue-card, .zp-final-card { padding: 20px 18px; }
+}
