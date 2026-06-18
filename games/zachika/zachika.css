@@ -1,0 +1,292 @@
+/* ============================================================
+   Zachika — Suika-style fruit merging game.
+   Soft pastel aesthetic, peach/cream palette.
+   ============================================================ */
+
+:root {
+  --bg-1: #ffe6d7;
+  --bg-2: #ffcbb3;
+  --container-bg: #fff7ed;
+  --container-trim: #c08260;
+  --container-trim-dark: #8a5740;
+  --text: #3a2a23;
+  --muted: #8c6a5e;
+  --danger: #e76f51;
+  --accent: #ef6c4a;
+  --accent-soft: #ffb39a;
+  --gold: #f3a953;
+  --font-sys: "Quicksand", "Nunito", "Comic Sans MS", "Segoe UI", Arial, sans-serif;
+  --font-display: "Quicksand", "Nunito", "Comic Sans MS", "Segoe UI", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  color: var(--text);
+  font-family: var(--font-sys);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#zk-root {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  padding: 12px;
+  gap: 12px;
+  grid-template-columns: 1fr 130px;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header  header"
+    "stage   ladder";
+}
+
+/* ---------- Header ---------------------------------------- */
+#zk-header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(192, 130, 96, 0.15);
+}
+.zk-brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  flex: 1;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+}
+.zk-stat {
+  text-align: right;
+  min-width: 70px;
+}
+.zk-stat-label {
+  font-family: var(--font-sys);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.zk-stat-value {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 2px;
+}
+.zk-next {
+  min-width: 60px;
+}
+.zk-next-fruit {
+  font-size: 28px;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+/* ---------- Stage / canvas -------------------------------- */
+#zk-stage {
+  grid-area: stage;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 0;
+  min-height: 0;
+}
+#zk-canvas {
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  background: var(--container-bg);
+  border: 3px solid var(--container-trim);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 -4px 0 var(--container-trim-dark),
+    0 8px 16px rgba(192, 130, 96, 0.25);
+  cursor: pointer;
+  touch-action: none;
+}
+
+/* Drop button — hidden by default, shown on touch/mobile */
+#zk-drop-btn {
+  display: none;
+  margin-top: 10px;
+  padding: 12px 28px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  background: var(--accent);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  box-shadow: 0 4px 0 var(--accent-soft);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+#zk-drop-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--accent-soft);
+}
+
+/* ---------- Ladder (fruit progression) -------------------- */
+#zk-ladder {
+  grid-area: ladder;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  min-height: 0;
+}
+.zk-ladder-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  text-align: center;
+}
+#zk-ladder-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+#zk-ladder-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+}
+#zk-ladder-list li .lemoji {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ---------- Overlay (start / game over) ------------------- */
+.zk-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(58, 42, 35, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  padding: 20px;
+  z-index: 10;
+}
+.zk-overlay[hidden] { display: none; }
+
+.zk-overlay-card {
+  background: var(--container-bg);
+  border: 3px solid var(--container-trim);
+  border-radius: 14px;
+  padding: 28px 36px;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+.zk-overlay-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.zk-overlay-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  margin-bottom: 12px;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+}
+.zk-overlay-sub {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.zk-btn {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  padding: 12px 28px;
+  background: var(--accent);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--accent-soft);
+}
+.zk-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--accent-soft);
+}
+
+/* ---------- Mobile ---------------------------------------- */
+@media (max-width: 700px), (pointer: coarse) {
+  #zk-root {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "header"
+      "stage"
+      "ladder";
+    gap: 8px;
+    padding: 8px;
+  }
+  #zk-ladder {
+    max-height: 70px;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px 10px;
+  }
+  .zk-ladder-label { display: none; }
+  #zk-ladder-list {
+    flex-direction: row;
+    gap: 4px;
+  }
+  #zk-ladder-list li {
+    flex-direction: column;
+    font-size: 9px;
+    min-width: 28px;
+  }
+  #zk-ladder-list li .lnum { display: none; }
+  #zk-drop-btn { display: inline-block; }
+  .zk-brand { font-size: 20px; }
+  .zk-stat-value { font-size: 18px; }
+  .zk-next-fruit { font-size: 24px; }
+}

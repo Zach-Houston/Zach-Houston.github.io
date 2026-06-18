@@ -23,6 +23,7 @@
     wikiracer: { title: "WikiRacer",  iframe: "games/wiki-racer/",        w: 1000, h: 720, icon: iconWiki },
     zachtris:  { title: "Zachtris",   iframe: "games/zachtris/",          w: 720,  h: 720, icon: iconBlocks },
     zachpardy: { title: "Zachpardy",  iframe: "games/zachpardy/",         w: 1080, h: 720, icon: iconDollar },
+    zachika:   { title: "Zachika",    iframe: "games/zachika/",           w: 760,  h: 800, icon: iconWatermelon },
   };
 
   // ---------- State ---------------------------------------------
@@ -358,5 +359,8 @@
   }
   function iconDollar() {
     return `<svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" fill="#060ce9" stroke="#000"/><text x="8" y="11" text-anchor="middle" font-family="Georgia, serif" font-size="10" font-weight="bold" fill="#f5d20d">$</text></svg>`;
+  }
+  function iconWatermelon() {
+    return `<svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" fill="#fff7ed" stroke="#000"/><text x="8" y="12" text-anchor="middle" font-size="10">🍉</text></svg>`;
   }
 })();
