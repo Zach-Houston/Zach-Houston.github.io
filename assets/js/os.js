@@ -13,7 +13,7 @@
   // page. `iframe` opens a URL in an embedded frame instead.
   const APPS = {
     about:    { title: "About Me",   content: "about",    w: 480, h: 480, icon: iconAbout },
-    resume:   { title: "Resume",     content: "resume",   w: 640, h: 620, icon: iconDoc },
+    resume:   { title: "Resume",     content: "resume",   w: 640, h: 620, icon: iconBriefcase },
     contact:  { title: "Contact",    content: "contact",  w: 420, h: 300, icon: iconMail },
     readme:   { title: "Read Me",    content: "readme",   w: 420, h: 320, icon: iconNote },
 
@@ -334,6 +334,9 @@
   }
   function iconDoc() {
     return `<svg viewBox="0 0 16 16"><path d="M3 1h8l3 3v11H3z" fill="#fff" stroke="#000"/><path d="M11 1v3h3" fill="none" stroke="#000"/><path d="M5 7h6M5 9h6M5 11h4" stroke="#000"/></svg>`;
+  }
+  function iconBriefcase() {
+    return `<svg viewBox="0 0 16 16"><path d="M6 4 V3 Q6 2 7 2 H9 Q10 2 10 3 V4" fill="none" stroke="#000"/><rect x="2" y="4" width="12" height="11" fill="#c0843a" stroke="#000"/><line x1="2" y1="9" x2="14" y2="9" stroke="#000"/><rect x="7" y="7" width="2" height="3" fill="#f5d020" stroke="#000"/></svg>`;
   }
   function iconFolder() {
     return `<svg viewBox="0 0 16 16"><path d="M1 4h5l2 2h7v9H1z" fill="#f5c845" stroke="#000"/><path d="M1 6h14v9H1z" fill="#ffd966" stroke="#000"/></svg>`;
