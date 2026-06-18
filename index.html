@@ -173,10 +173,22 @@
         <input type="radio" name="resume-tab" id="r-tab-swe" class="resume-tab-radio" checked />
         <input type="radio" name="resume-tab" id="r-tab-ai"  class="resume-tab-radio" />
 
-        <nav class="resume-tabs">
-          <label for="r-tab-swe">Software Engineer</label>
-          <label for="r-tab-ai">AI Engineer</label>
-        </nav>
+        <div class="resume-toolbar">
+          <nav class="resume-tabs">
+            <label for="r-tab-swe">Software Engineer</label>
+            <label for="r-tab-ai">AI Engineer</label>
+          </nav>
+          <div class="resume-downloads">
+            <a class="resume-dl" data-for="swe"
+               href="assets/resumes/Zachary_Houston_Resume_SWE.pdf"
+               download="Zachary_Houston_Resume_SWE.pdf"
+               title="Download Software Engineer resume (PDF)">⬇ Download</a>
+            <a class="resume-dl" data-for="ai"
+               href="assets/resumes/Zachary_Houston_Resume_AI.pdf"
+               download="Zachary_Houston_Resume_AI.pdf"
+               title="Download AI Engineer resume (PDF)">⬇ Download</a>
+          </div>
+        </div>
 
         <div class="resume-panels">
           <!-- ============ Software Engineer ===================== -->
@@ -189,6 +201,8 @@
                 <a class="link" href="https://www.linkedin.com/in/zach-houston" target="_blank" rel="noreferrer">LinkedIn</a>
                 &nbsp;·&nbsp;
                 <a class="link" href="https://github.com/Zach-Houston" target="_blank" rel="noreferrer">github.com/Zach-Houston</a>
+                &nbsp;·&nbsp;
+                <a class="link" href="https://zacharyhouston.com" target="_blank" rel="noreferrer">zacharyhouston.com</a>
               </p>
             </header>
 
@@ -216,10 +230,10 @@
                 </div>
                 <ul>
                   <li>Contributed core pieces to a reusable setup-experience framework in Java and TypeScript/JavaScript, replacing bespoke per-team configuration flows with automated, guided setup pages.</li>
-                  <li>Built an in-app learning system that bundled Salesforce training directly into the product, with guided learning paths and milestone tracking.</li>
-                  <li>Enabled organizations to author and deliver their own customized training content within the Salesforce experience, alongside Salesforce&rsquo;s native lessons.</li>
-                  <li>Designed interactive lessons tied to live in-org Salesforce objects, requiring users to create real records to demonstrate competency rather than passively complete material.</li>
-                  <li>Built leadership dashboards to track learning completion and progress across an organization.</li>
+                  <li>Built a framework for delivering in-app Salesforce training, with support for guided learning paths and milestone tracking, used by HR, UX, and external partners to author and deliver lessons.</li>
+                  <li>Designed the framework to let internal teams and external companies create and publish their own customized training content within the Salesforce experience.</li>
+                  <li>Built framework support for interactive lessons that tie into live in-org Salesforce objects, letting authors require users to create real records to demonstrate competency rather than passively complete material.</li>
+                  <li>Built framework support for leadership dashboards, enabling organizations to track learning completion and progress across their users.</li>
                 </ul>
               </div>
 
@@ -236,7 +250,7 @@
                   <li>Contributed to the development of an Eclipse-based Integrated Development Environment.</li>
                   <li>Collaborated with team members to design and integrate editor parsing changes based on internal and external feedback.</li>
                   <li>Cooperated with external teams to guide integrations with the product.</li>
-                  <li>Assisted in leading &ldquo;zStart,&rdquo; a group created to help new hires adjust to work in the Systems department.</li>
+                  <li>Helped lead the &ldquo;zStart&rdquo; group, created to help new hires adjust to work in the Systems department.</li>
                 </ul>
               </div>
 
@@ -317,6 +331,8 @@
                 <a class="link" href="https://www.linkedin.com/in/zach-houston" target="_blank" rel="noreferrer">LinkedIn</a>
                 &nbsp;·&nbsp;
                 <a class="link" href="https://github.com/Zach-Houston" target="_blank" rel="noreferrer">github.com/Zach-Houston</a>
+                &nbsp;·&nbsp;
+                <a class="link" href="https://zacharyhouston.com" target="_blank" rel="noreferrer">zacharyhouston.com</a>
               </p>
             </header>
 
@@ -333,11 +349,12 @@
                   <span class="muted">Feb 2025 &ndash; Present</span>
                 </div>
                 <ul>
-                  <li>Built a reusable, configurable Claude skill for retrieving, triaging, and recommending fixes for incoming alerts &mdash; adopted by other teams to automate their own alert handling by dropping in their channel.</li>
-                  <li>Developed a Claude skill that orchestrates multiple independent subagents to triage a team&rsquo;s alerts, pending PRs, and unresolved messages, posting a consolidated summary with suggested actions to Slack.</li>
-                  <li>Built an agent flow that gathers context from work items, Slack threads, and documents, then implements a solution and opens a PR for review.</li>
+                  <li>Architected and built an agentic automation layer for team operations, using orchestrated subagents to triage alerts, pending PRs, and unresolved messages and surface consolidated summaries with recommended actions in Slack.</li>
+                  <li>Built a reusable, self-serve alert-triage capability adopted by other teams, who could drop in their own channel to get automated retrieval, triage, and fix recommendations with no custom setup.</li>
+                  <li>Created an autonomous fix-and-PR workflow that gathers context from work items, Slack threads, and documents, implements a solution, and opens a pull request for review.</li>
+                  <li>Drove AI adoption across the organization, building reusable Claude skills and tooling that other engineers and teams could extend for their own workflows.</li>
                   <li>Drove setup-experience framework work focused on setup flows for the company&rsquo;s AI-related features.</li>
-                  <li>Conducted technical interviews for intern and new-grad engineering candidates.</li>
+                  <li>Conducted technical interviews for intern and new-grad engineering candidates, assessing coding ability and problem-solving to inform hiring decisions.</li>
                 </ul>
                 <div class="resume-job-row sub">
                   <em>Software Engineer</em>
@@ -345,10 +362,10 @@
                 </div>
                 <ul>
                   <li>Contributed core pieces to a reusable setup-experience framework in Java and TypeScript/JavaScript, replacing bespoke per-team configuration flows with automated, guided setup pages and standardizing setup across the platform.</li>
-                  <li>Built an in-app learning system that bundled Salesforce training directly into the product, with guided learning paths and milestone tracking.</li>
-                  <li>Enabled organizations to author and deliver their own customized training content within the Salesforce experience, alongside Salesforce&rsquo;s native lessons.</li>
-                  <li>Designed interactive lessons tied to live in-org Salesforce objects, requiring users to create real records to demonstrate competency rather than passively complete material.</li>
-                  <li>Built leadership dashboards to track learning completion and progress across an organization.</li>
+                  <li>Built a framework for delivering in-app Salesforce training, with support for guided learning paths and milestone tracking, used by HR, UX, and external partners to author and deliver lessons.</li>
+                  <li>Designed the framework to let internal teams and external companies create and publish their own customized training content within the Salesforce experience.</li>
+                  <li>Built framework support for interactive lessons that tie into live in-org Salesforce objects, letting authors require users to create real records to demonstrate competency rather than passively complete material.</li>
+                  <li>Built framework support for leadership dashboards, enabling organizations to track learning completion and progress across their users.</li>
                 </ul>
               </div>
 
@@ -363,7 +380,7 @@
                 </div>
                 <ul>
                   <li>Contributed to the development of an Eclipse-based Integrated Development Environment, designing and integrating editor parsing changes from internal and external feedback.</li>
-                  <li>Assisted in leading &ldquo;zStart,&rdquo; a group created to help new hires adjust to work in the Systems department.</li>
+                  <li>Helped lead the &ldquo;zStart&rdquo; group, created to help new hires adjust to work in the Systems department.</li>
                 </ul>
               </div>
 
@@ -415,7 +432,7 @@
               <legend>AI Projects</legend>
               <div class="resume-job">
                 <div class="resume-job-row">
-                  <strong>Animal Crossing &mdash; LLM-Driven NPC Dialogue</strong>
+                  <strong>Animal Crossing: LLM-Driven NPC Dialogue</strong>
                 </div>
                 <ul>
                   <li>Extended an open-source PC port of a decompiled GameCube game (large native C codebase) to replace static villager dialogue with live conversation generated through the Anthropic Claude API.</li>
@@ -427,7 +444,7 @@
                   <strong>RetroArch MCP Server</strong>
                 </div>
                 <ul>
-                  <li>Built a Java MCP (Model Context Protocol) server exposing nine tools that let an LLM set up and operate the RetroArch emulator &mdash; detecting installs across platforms, validating and patching config, managing cores, and driving emulation and gameplay input over RetroArch&rsquo;s UDP command interface.</li>
+                  <li>Built a Java MCP (Model Context Protocol) server exposing nine tools that let an LLM set up and operate the RetroArch emulator, including detecting installs across platforms, validating and patching config, managing cores, and driving emulation and gameplay input over RetroArch&rsquo;s UDP command interface.</li>
                 </ul>
               </div>
             </fieldset>

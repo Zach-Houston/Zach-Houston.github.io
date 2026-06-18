@@ -666,13 +666,23 @@ table.kv td {
   font-size: 12px;
 }
 .resume-tab-radio { display: none; }
+
+/* Toolbar: tabs on the left, download button on the right */
+.resume-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 2;
+  gap: 8px;
+  padding: 0 4px 0 0;
+}
+
 .resume-tabs {
   display: flex;
   gap: 2px;
   padding: 0 0 0 4px;
-  margin-bottom: -1px;
-  position: relative;
-  z-index: 2;
 }
 .resume-tabs label {
   background: var(--face);
@@ -689,13 +699,50 @@ table.kv td {
   border-top-right-radius: 3px;
 }
 .resume-tabs label:hover { background: var(--face-light); }
-#r-tab-swe:checked ~ .resume-tabs label[for="r-tab-swe"],
-#r-tab-ai:checked  ~ .resume-tabs label[for="r-tab-ai"] {
+#r-tab-swe:checked ~ .resume-toolbar .resume-tabs label[for="r-tab-swe"],
+#r-tab-ai:checked  ~ .resume-toolbar .resume-tabs label[for="r-tab-ai"] {
   background: var(--face);
   font-weight: bold;
   padding-top: 5px;
   margin-top: -2px;
   z-index: 3;
+}
+
+/* Download button — Win98 raised bevel, only the active tab's link
+   is shown (CSS-only via sibling selector). */
+.resume-downloads { display: flex; align-items: flex-end; }
+.resume-dl {
+  display: none;
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.4;
+  text-decoration: none;
+  color: #000;
+  padding: 6px 14px;
+  background: var(--face);
+  border-top: 1px solid var(--highlight);
+  border-left: 1px solid var(--highlight);
+  border-right: 1px solid var(--face-darker);
+  border-bottom: 1px solid var(--face-darker);
+  box-shadow:
+    inset 1px 1px 0 var(--face-light),
+    inset -1px -1px 0 var(--face-dark);
+  margin-bottom: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.resume-dl:hover { background: var(--face-light); }
+.resume-dl:active {
+  border-top-color: var(--face-darker);
+  border-left-color: var(--face-darker);
+  border-right-color: var(--highlight);
+  border-bottom-color: var(--highlight);
+  box-shadow: inset 1px 1px 0 var(--face-dark);
+  padding: 7px 13px 5px 15px;
+}
+#r-tab-swe:checked ~ .resume-toolbar .resume-dl[data-for="swe"],
+#r-tab-ai:checked  ~ .resume-toolbar .resume-dl[data-for="ai"] {
+  display: inline-block;
 }
 
 /* Panels — sunken bevel like a property-sheet pane */
