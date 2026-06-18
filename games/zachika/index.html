@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Zachika</title>
+    <link rel="stylesheet" href="zachika.css" />
+  </head>
+  <body>
+    <div id="zk-root">
+      <!-- ============ Header ================================= -->
+      <header id="zk-header">
+        <div class="zk-brand">ZACHIKA</div>
+        <div class="zk-stat">
+          <div class="zk-stat-label">SCORE</div>
+          <div class="zk-stat-value" id="zk-score">0</div>
+        </div>
+        <div class="zk-stat zk-next">
+          <div class="zk-stat-label">NEXT</div>
+          <div class="zk-next-fruit" id="zk-next">🍒</div>
+        </div>
+      </header>
+
+      <!-- ============ Play area ============================== -->
+      <main id="zk-stage">
+        <canvas id="zk-canvas" width="500" height="700"></canvas>
+
+        <!-- Drop button — visible only on mobile via CSS -->
+        <button id="zk-drop-btn" type="button">DROP</button>
+
+        <!-- Overlay: start / game-over -->
+        <div id="zk-overlay" class="zk-overlay">
+          <div class="zk-overlay-card">
+            <div class="zk-overlay-eyebrow" id="zk-overlay-eyebrow">READY</div>
+            <div class="zk-overlay-title" id="zk-overlay-title">ZACHIKA</div>
+            <div class="zk-overlay-sub" id="zk-overlay-sub">
+              Drop matching fruits to merge them.<br />
+              Don&rsquo;t let the pile overflow.
+            </div>
+            <button id="zk-start" class="zk-btn primary">Start</button>
+          </div>
+        </div>
+      </main>
+
+      <!-- ============ Fruit ladder ============================ -->
+      <aside id="zk-ladder" aria-label="Fruit progression">
+        <div class="zk-ladder-label">CHAIN</div>
+        <ol id="zk-ladder-list">
+          <!-- populated by JS -->
+        </ol>
+      </aside>
+    </div>
+
+    <script src="zachika.js"></script>
+  </body>
+</html>
