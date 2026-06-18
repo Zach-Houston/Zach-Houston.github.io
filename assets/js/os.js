@@ -14,7 +14,6 @@
   const APPS = {
     about:    { title: "About Me",   content: "about",    w: 480, h: 480, icon: iconAbout },
     resume:   { title: "Resume",     content: "resume",   w: 640, h: 620, icon: iconDoc },
-    projects: { title: "Projects",   content: "projects", w: 480, h: 360, icon: iconFolder },
     contact:  { title: "Contact",    content: "contact",  w: 420, h: 300, icon: iconMail },
     readme:   { title: "Read Me",    content: "readme",   w: 420, h: 320, icon: iconNote },
 

@@ -27,13 +27,6 @@
           <span class="icon-label">Resume</span>
         </button>
 
-        <button class="desktop-icon" data-app="projects" type="button">
-          <span class="icon-img" aria-hidden="true">
-            <svg viewBox="0 0 32 32"><path d="M2 8h10l3 3h15v18H2z" fill="#f5c845" stroke="#000"/><path d="M2 11h28v18H2z" fill="#ffd966" stroke="#000"/></svg>
-          </span>
-          <span class="icon-label">Projects</span>
-        </button>
-
         <button class="desktop-icon" data-app="contact" type="button">
           <span class="icon-img" aria-hidden="true">
             <svg viewBox="0 0 32 32"><rect x="3" y="7" width="26" height="18" fill="#fff" stroke="#000"/><path d="M3 7 16 18 29 7" fill="none" stroke="#000"/></svg>
@@ -91,7 +84,6 @@
       <ul class="start-list">
         <li data-app="about"><span class="sm-icon">i</span>About Me</li>
         <li data-app="resume"><span class="sm-icon">≡</span>Resume</li>
-        <li data-app="projects"><span class="sm-icon">▤</span>Projects</li>
         <li data-app="contact"><span class="sm-icon">@</span>Contact</li>
         <li class="sep"></li>
         <li data-app="wikiracer"><span class="sm-icon">W</span>WikiRacer</li>
@@ -159,7 +151,7 @@
           <legend>About this page</legend>
           <p class="small">
             This is a personal homepage rendered as a retro desktop. Open the
-            other icons to see resume, projects, and a couple of small games.
+            other icons to see resume, contact info, and a couple of small games.
           </p>
         </fieldset>
 
@@ -474,24 +466,34 @@
       </div>
     </template>
 
-    <template data-content="projects">
-      <h2>Projects</h2>
-      <p><em>// Placeholder — list repos, demos, write-ups.</em></p>
-      <ul class="file-list">
-        <li>📁 project-one — short description</li>
-        <li>📁 project-two — short description</li>
-        <li>📁 project-three — short description</li>
-      </ul>
-    </template>
-
     <template data-content="contact">
-      <h2>Contact</h2>
-      <p><em>// Placeholder — fill these in.</em></p>
-      <ul>
-        <li>Email: <a class="link" href="mailto:you@example.com">you@example.com</a></li>
-        <li>GitHub: <a class="link" href="https://github.com/" target="_blank" rel="noreferrer">github.com/you</a></li>
-        <li>LinkedIn: <a class="link" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">linkedin.com/in/you</a></li>
-      </ul>
+      <div class="about-page">
+        <fieldset class="win-fieldset">
+          <legend>Get in touch</legend>
+          <table class="kv">
+            <tr>
+              <th>Email</th>
+              <td><a class="link" href="mailto:zacharyhouston34@gmail.com">zacharyhouston34@gmail.com</a></td>
+            </tr>
+            <tr>
+              <th>LinkedIn</th>
+              <td><a class="link" href="https://www.linkedin.com/in/zachary-houston-aab828131/" target="_blank" rel="noreferrer">linkedin.com/in/zachary-houston-aab828131</a></td>
+            </tr>
+            <tr>
+              <th>GitHub</th>
+              <td><a class="link" href="https://github.com/Zach-Houston" target="_blank" rel="noreferrer">github.com/Zach-Houston</a></td>
+            </tr>
+            <tr>
+              <th>Website</th>
+              <td><a class="link" href="https://zacharyhouston.com" target="_blank" rel="noreferrer">zacharyhouston.com</a></td>
+            </tr>
+          </table>
+        </fieldset>
+
+        <p class="small muted footnote">
+          Best reached by email or LinkedIn.
+        </p>
+      </div>
     </template>
 
     <template data-content="readme">
