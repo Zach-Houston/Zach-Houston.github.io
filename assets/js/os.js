@@ -24,6 +24,7 @@
     zachtris:  { title: "Zachtris",   iframe: "games/zachtris/",          w: 720,  h: 720, icon: iconBlocks },
     zachpardy: { title: "Zachpardy",  iframe: "games/zachpardy/",         w: 1080, h: 720, icon: iconDollar },
     zachika:   { title: "Zachika",    iframe: "games/zachika/",           w: 760,  h: 800, icon: iconWatermelon },
+    zachdle:   { title: "Zachdle",    iframe: "games/zachdle/",           w: 560,  h: 760, icon: iconWordleTiles },
   };
 
   // ---------- State ---------------------------------------------
@@ -362,5 +363,8 @@
   }
   function iconWatermelon() {
     return `<svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" fill="#fff7ed" stroke="#000"/><text x="8" y="12" text-anchor="middle" font-size="10">🍉</text></svg>`;
+  }
+  function iconWordleTiles() {
+    return `<svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" fill="#fff" stroke="#000"/><rect x="2.5" y="5.5" width="3" height="5" fill="#6aaa64" stroke="#000"/><rect x="6.5" y="5.5" width="3" height="5" fill="#c9b458" stroke="#000"/><rect x="10.5" y="5.5" width="3" height="5" fill="#787c7e" stroke="#000"/></svg>`;
   }
 })();

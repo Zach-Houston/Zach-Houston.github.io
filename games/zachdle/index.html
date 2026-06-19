@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Zachdle</title>
+    <link rel="stylesheet" href="zachdle.css" />
+  </head>
+  <body>
+    <div id="zd-root">
+      <!-- ============ Header ================================= -->
+      <header id="zd-header">
+        <div class="zd-brand">ZACHDLE</div>
+        <div class="zd-mode-chip" id="zd-mode-chip">
+          <span class="zd-mode-label" id="zd-mode-label">DAILY</span>
+          <span class="zd-mode-value" id="zd-mode-value">—</span>
+        </div>
+        <button id="zd-menu-btn" type="button" title="New game / options">⋯</button>
+      </header>
+
+      <!-- ============ Grid =================================== -->
+      <main id="zd-stage">
+        <div id="zd-grid" aria-label="Guess grid">
+          <!-- populated by JS: 6 rows × 5 cells -->
+        </div>
+        <div id="zd-toast" class="zd-toast" hidden></div>
+      </main>
+
+      <!-- ============ Keyboard ============================== -->
+      <div id="zd-keyboard" aria-label="On-screen keyboard">
+        <!-- populated by JS -->
+      </div>
+
+      <!-- ============ Menu modal ============================= -->
+      <div id="zd-menu" class="zd-modal" hidden>
+        <div class="zd-modal-card">
+          <button class="zd-modal-close" id="zd-menu-close" type="button" aria-label="Close">✕</button>
+          <h2>New game</h2>
+          <p class="zd-modal-sub">Play today&rsquo;s daily word, or set a custom seed to share a board with a friend.</p>
+
+          <button id="zd-play-daily" class="zd-btn primary">Play today&rsquo;s word</button>
+
+          <div class="zd-seed-row">
+            <input id="zd-seed-input" type="text" autocomplete="off"
+                   maxlength="32" spellcheck="false"
+                   placeholder="Custom seed" />
+            <button id="zd-seed-shuffle" type="button"
+                    class="zd-btn ghost" title="Generate a random seed">🎲</button>
+          </div>
+          <button id="zd-play-seed" class="zd-btn">Play seeded</button>
+
+          <p class="zd-modal-help">
+            Same seed → same word. Share with friends to race.
+          </p>
+        </div>
+      </div>
+
+      <!-- ============ End-of-game modal ===================== -->
+      <div id="zd-end" class="zd-modal" hidden>
+        <div class="zd-modal-card">
+          <div class="zd-end-eyebrow" id="zd-end-eyebrow">YOU WON</div>
+          <h2 id="zd-end-title">Nice!</h2>
+          <p class="zd-end-word">
+            The word was
+            <strong id="zd-end-word">—</strong>
+          </p>
+          <pre class="zd-end-share" id="zd-end-share">—</pre>
+          <div class="zd-end-actions">
+            <button id="zd-share-btn" class="zd-btn primary">Copy share</button>
+            <button id="zd-play-again" class="zd-btn">Play again</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="words.js"></script>
+    <script src="zachdle.js"></script>
+  </body>
+</html>
