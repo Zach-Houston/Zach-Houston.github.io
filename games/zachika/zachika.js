@@ -35,7 +35,7 @@
   const WALL_BOTTOM = HEIGHT - 20;
   const DROP_Y = 60;
   const DANGER_Y = 110;   // line just below drop area
-  const GAMEOVER_FRAMES = 90; // ~1.5s @ 60fps above the line → game over
+  const GAMEOVER_FRAMES = 30; // ~0.5s @ 60fps above the line → game over
 
   // Physics tuning
   const GRAVITY = 0.32;
@@ -207,11 +207,8 @@
         b.vx += ix / b.mass;
         b.vy += iy / b.mass;
 
-        // Tangential friction (cosmetic spin)
-        const tx = -ny, ty = nx;
-        const velT = rvx * tx + rvy * ty;
-        a.angVel += velT * 0.002;
-        b.angVel -= velT * 0.002;
+        // (no angular velocity — emojis don't visually benefit from spin,
+        // and tangential friction was compounding into rapid spins)
       }
     }
   }
@@ -330,22 +327,21 @@
     }
   }
 
-  function drawFruit(f, x, y, angle, alpha) {
+  function drawFruit(f, x, y, _angle, alpha) {
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(angle);
+    // Emojis render upright — no rotation. Spinning emojis look weird
+    // and the tangential-friction spin compounded fast in dense stacks.
     ctx.globalAlpha = alpha;
-    // Soft drop shadow circle
-    ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
-    ctx.beginPath();
-    ctx.arc(0, f.r * 0.15, f.r, 0, Math.PI * 2);
-    ctx.fill();
-    // Reset fillStyle to fully opaque before fillText — Chrome's canvas
-    // applies the fillStyle's alpha to color emoji glyphs, which would
-    // otherwise render the emoji at 8% opacity (washed out / grayed).
+    // No shadow disc — it visually drew the "bubble" the user was
+    // seeing, but the emoji extends slightly beyond it (emojis have
+    // glyph padding). Real Suika doesn't draw a bubble either.
+    // fillStyle MUST be opaque before fillText — Chrome's canvas
+    // applies the fillStyle's alpha to color emoji glyphs.
     ctx.fillStyle = "#000";
-    // Emoji rendered at ~2.1x radius (matches visible diameter)
-    const size = f.r * 2.1;
+    // size = collision diameter / 0.85 to compensate for the ~15% glyph
+    // padding emoji fonts include. Visible emoji ≈ 2 * collision radius.
+    const size = f.r * 2.4;
     ctx.font = `${size}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
