@@ -340,6 +340,10 @@
     ctx.beginPath();
     ctx.arc(0, f.r * 0.15, f.r, 0, Math.PI * 2);
     ctx.fill();
+    // Reset fillStyle to fully opaque before fillText — Chrome's canvas
+    // applies the fillStyle's alpha to color emoji glyphs, which would
+    // otherwise render the emoji at 8% opacity (washed out / grayed).
+    ctx.fillStyle = "#000";
     // Emoji rendered at ~2.1x radius (matches visible diameter)
     const size = f.r * 2.1;
     ctx.font = `${size}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
