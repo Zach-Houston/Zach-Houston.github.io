@@ -40,6 +40,9 @@
   // Physics tuning
   const GRAVITY = 0.32;
   const DAMPING = 0.995;
+  const ANG_DAMPING = 0.93;   // angular velocity dies fast so spin can't run away
+  const FRICTION_COEF = 0.0006; // tangential -> angular nudge per collision
+  const MAX_ANG_VEL = 0.07;    // hard cap (rad/frame ≈ 4°)
   const RESTITUTION = 0.15;
   const ITERATIONS = 6;
   const SLEEP_V = 0.05;
@@ -122,13 +125,14 @@
 
   // ---------- Physics step -----------------------------------
   function physicsStep() {
-    // Gravity + damping
+    // Gravity + damping. Angular damping is much stronger than linear
+    // damping so accumulated spin from collisions dies off quickly.
     for (const b of bodies) {
       if (b.merged) continue;
       b.vy += GRAVITY;
       b.vx *= DAMPING;
       b.vy *= DAMPING;
-      b.angVel *= DAMPING;
+      b.angVel *= ANG_DAMPING;
     }
     // Integrate
     for (const b of bodies) {
@@ -142,11 +146,14 @@
       resolveWalls();
       resolveCollisions();
     }
-    // Sleep + entered flag
+    // Sleep + entered flag + angular cap
     for (const b of bodies) {
       if (b.merged) continue;
       if (Math.abs(b.vx) < SLEEP_V) b.vx = 0;
       if (Math.abs(b.vy) < SLEEP_V) b.vy = 0;
+      if (b.angVel > MAX_ANG_VEL) b.angVel = MAX_ANG_VEL;
+      else if (b.angVel < -MAX_ANG_VEL) b.angVel = -MAX_ANG_VEL;
+      if (Math.abs(b.angVel) < 0.002) b.angVel = 0;
       if (!b.entered && b.y > DANGER_Y + 30) b.entered = true;
     }
   }
@@ -207,8 +214,13 @@
         b.vx += ix / b.mass;
         b.vy += iy / b.mass;
 
-        // (no angular velocity — emojis don't visually benefit from spin,
-        // and tangential friction was compounding into rapid spins)
+        // Tangential friction gives a gentle, natural-feeling roll.
+        // Coefficient is small and ANG_DAMPING + MAX_ANG_VEL prevent
+        // any runaway spin in dense stacks.
+        const tx = -ny, ty = nx;
+        const velT = rvx * tx + rvy * ty;
+        a.angVel += velT * FRICTION_COEF;
+        b.angVel -= velT * FRICTION_COEF;
       }
     }
   }
@@ -327,11 +339,12 @@
     }
   }
 
-  function drawFruit(f, x, y, _angle, alpha) {
+  function drawFruit(f, x, y, angle, alpha) {
     ctx.save();
     ctx.translate(x, y);
-    // Emojis render upright — no rotation. Spinning emojis look weird
-    // and the tangential-friction spin compounded fast in dense stacks.
+    // Gentle rotation — angVel is friction-driven, capped, and damps
+    // hard so fruits tilt naturally without ever spinning fast.
+    ctx.rotate(angle);
     ctx.globalAlpha = alpha;
     // No shadow disc — it visually drew the "bubble" the user was
     // seeing, but the emoji extends slightly beyond it (emojis have
