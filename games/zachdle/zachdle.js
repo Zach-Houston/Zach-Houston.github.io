@@ -75,7 +75,7 @@
     endModal:    $("zd-end"),
     endEyebrow:  $("zd-end-eyebrow"),
     endTitle:    $("zd-end-title"),
-    endWord:     $("zd-end-word"),
+    endSecret:   $("zd-end-secret"),
     endShare:    $("zd-end-share"),
     shareBtn:    $("zd-share-btn"),
     playAgain:   $("zd-play-again"),
@@ -296,11 +296,7 @@
     els.endTitle.textContent = won
       ? winTitle(state.currentRow + 1)
       : "Better luck next time";
-    els.endWord.textContent = "The word was";
-    const strong = document.createElement("strong");
-    strong.id = "zd-end-word-strong";
-    strong.textContent = state.secret;
-    els.endWord.appendChild(strong);
+    els.endSecret.textContent = state.secret.toUpperCase();
     els.endShare.textContent = shareText;
     state._lastShare = shareText;
     // Small delay so the reveal animation finishes before the modal
@@ -315,11 +311,18 @@
     return "Phew!";
   }
   function buildShareText() {
-    const used = state.phase === "won" ? state.currentRow + 1 : "X";
-    const lines = [`Zachdle ${state.seedLabel === "DAILY" ? state.seedDisplay : state.seedDisplay} ${used}/6`];
-    for (let r = 0; r <= state.currentRow; r++) {
+    // On a win, currentRow points at the winning row. On a loss,
+    // currentRow has already incremented past the last guess to ROWS,
+    // so cap the loop at the array length to avoid an out-of-bounds
+    // access that would silently abort finishGame().
+    const usedGuesses = state.phase === "won"
+      ? state.currentRow + 1
+      : state.guesses.filter((g) => g.colors[0] !== null).length;
+    const used = state.phase === "won" ? usedGuesses : "X";
+    const lines = [`Zachdle ${state.seedDisplay} ${used}/6`];
+    for (let r = 0; r < state.guesses.length; r++) {
       const row = state.guesses[r];
-      if (row.colors[0] === null) break;
+      if (!row || row.colors[0] === null) break;
       const emoji = row.colors
         .map((c) =>
           c === "green" ? "🟩" : c === "yellow" ? "🟨" : "⬛"
