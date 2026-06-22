@@ -624,6 +624,21 @@ body {
   margin: 0;
 }
 
+/* Compact list used inside fieldsets (e.g. About Me's favorite games) */
+.about-games-list {
+  list-style: square inside;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.55;
+  columns: 2;
+  column-gap: 16px;
+}
+.about-games-list li {
+  break-inside: avoid;
+  padding: 0;
+}
+
 /* Key/value table inside a group box */
 table.kv {
   width: 100%;
